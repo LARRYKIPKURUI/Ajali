@@ -8,6 +8,8 @@ import Map from './pages/Map';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Footer from './components/Footer'
+
 
  const App = () => {
   return (
@@ -21,6 +23,8 @@ import Signup from './pages/Signup';
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>
+        <Footer />
+
     </Router>
   );
 };
