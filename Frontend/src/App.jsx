@@ -1,15 +1,28 @@
 import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import Navbar from './components/Navbar'
+import Home from './pages/Home';
+import Report from './pages/Report';
+import Map from './pages/Map';
+import Profile from './pages/Profile';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 
  const App = () => {
   return (
-    <div className='App'>
+    <Router>
       <Navbar />
-      <section id='home'>
-        <h1>Welcome to Ajali</h1>
-      </section>
-    </div>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path="/report" element={<Report />} />
+        <Route path="/map" element={<Map />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
