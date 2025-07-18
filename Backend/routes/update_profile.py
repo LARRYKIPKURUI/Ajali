@@ -21,4 +21,15 @@ def update_profile():
 
     db.session.commit()
 
-    return jsonify({"message": "Profile updated successfully", "user": user.username}), 200
+    return jsonify({
+    "message": "Profile updated successfully",
+    "user": {
+        "id": user.id,
+        "username": user.username,
+        "email": user.email,
+        "phone_number": user.phone_number,
+        "emergency_contact_name": user.emergency_contact_name,
+        "emergency_contact_phone": user.emergency_contact_phone
+    }
+}), 200
+
