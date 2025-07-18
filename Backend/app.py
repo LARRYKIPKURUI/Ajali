@@ -4,8 +4,7 @@ from dotenv import load_dotenv
 import os
 from config import Config
 from extensions import db, migrate, jwt
-
-# from routes.auth import auth_bp
+from routes.auth import auth_bp
 # from routes.incidents import incidents_bp
 from routes.media_route import media_bp
 # from routes.admin import admin_bp
@@ -25,7 +24,7 @@ def create_app():
 
     # Register blueprints 
     
-    # app.register_blueprint(auth_bp)
+    app.register_blueprint(auth_bp, url_prefix="/api/auth")
     # app.register_blueprint(incidents_bp)
     app.register_blueprint(media_bp, url_prefix="/api")
     # app.register_blueprint(admin_bp)
