@@ -64,6 +64,17 @@ class Media(db.Model, SerializerMixin):
     def __repr__(self):
         return f"<Media id={self.id} type='{self.media_type}' user_id={self.user_id} url='{self.url}'>"
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "media_type": self.media_type,
+            "url": self.url,
+            "public_id": self.public_id,
+            "created_at": self.created_at.isoformat(),
+            "user_id": self.user_id,
+            "incident_id": self.incident_id
+        }
+
 
 #  Alert Model 
 class Alert(db.Model, SerializerMixin):

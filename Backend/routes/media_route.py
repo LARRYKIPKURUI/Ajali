@@ -39,12 +39,13 @@ def upload_media():
 
     # Save to DB
     media = Media(
-        url=upload_result["secure_url"],
-        public_id=upload_result["public_id"],
-        media_type=media_type,
-        user_id=user.id,
-        incident_id=incident.id if incident else None
-    )
+    url=upload_result["secure_url"],
+    public_id=upload_result["public_id"],
+    media_type=media_type,
+    user_id=user.id,
+    incident_id=incident.id if incident else None
+                )
+    
     db.session.add(media)
     db.session.commit()
 
