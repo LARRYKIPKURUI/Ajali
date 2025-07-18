@@ -1,20 +1,7 @@
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy_serializer import SerializerMixin
-from sqlalchemy import MetaData
 from extensions import db
+from sqlalchemy_serializer import SerializerMixin
 
-
-metadata = MetaData(naming_convention={
-    "ix": "ix_%(table_name)s_%(column_0_name)s",  
-    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-    "uq": "uq_%(table_name)s_%(column_0_name)s",
-    "ck": "ck_%(table_name)s_%(constraint_name)s",
-    "pk": "pk_%(table_name)s"
-})
-
-db = SQLAlchemy(metadata=metadata)
-
-#   User Model
+#  User Model
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
@@ -32,12 +19,13 @@ class User(db.Model, SerializerMixin):
     # Relationships
     incidents = db.relationship('Incident', backref='user', lazy=True)
     alerts_created = db.relationship('Alert', backref='creator', lazy=True)
-    
+    media = db.relationship('Media', backref='user', lazy=True)
+
     def __repr__(self):
         return f"<User id={self.id} username='{self.username}' email='{self.email}'>"
 
 
-#   Incident Model
+#  Incident Model
 class Incident(db.Model, SerializerMixin):
     __tablename__ = 'incidents'
 
@@ -45,46 +33,50 @@ class Incident(db.Model, SerializerMixin):
     type = db.Column(db.String(50), nullable=False)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    latitude = db.Column(db.Float, nullable=False)
-    longitude = db.Column(db.Float, nullable=False)
+    latitude = db.Column(db.Float, nullable=False, index=True)
+    longitude = db.Column(db.Float, nullable=False, index=True)
     is_critical = db.Column(db.Boolean, default=False)
-    status = db.Column(db.String(50), default='submitted')  # resolved,rejected,pending
+    status = db.Column(db.String(50), default='submitted')  # resolved, rejected, pending
     created_at = db.Column(db.DateTime, server_default=db.func.now())
-    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     # Relationships
     media = db.relationship('Media', backref='incident', lazy=True)
-    
+
     def __repr__(self):
         return f"<Incident id={self.id} title='{self.title}' status='{self.status}' user_id={self.user_id}>"
 
 
-
-#   Media Model
+#  Media Model 
 class Media(db.Model, SerializerMixin):
     __tablename__ = 'media'
 
     id = db.Column(db.Integer, primary_key=True)
-    incident_id = db.Column(db.Integer, db.ForeignKey('incidents.id'), nullable=False)
     media_type = db.Column(db.String(20), nullable=False)  # Image or Video
     url = db.Column(db.String(255), nullable=False)
+    public_id = db.Column(db.String(255), nullable=False)  # Required for Cloudinary delete
     created_at = db.Column(db.DateTime, server_default=db.func.now())
-    
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    incident_id = db.Column(db.Integer, db.ForeignKey('incidents.id'), nullable=True)
+
     def __repr__(self):
-        return f"<Media id={self.id} type='{self.media_type}' url='{self.url}'>"
+        return f"<Media id={self.id} type='{self.media_type}' user_id={self.user_id} url='{self.url}'>"
 
 
-#   Alert Model 
+#  Alert Model 
 class Alert(db.Model, SerializerMixin):
     __tablename__ = 'alerts'
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     message = db.Column(db.Text, nullable=False)
-    region = db.Column(db.String(100))
-    created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    region = db.Column(db.String(100), index=True)
+    severity = db.Column(db.String(20), default='info')  # info, warning, critical
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
+    created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
     def __repr__(self):
-        return f"<Alert id={self.id} title='{self.title}' region='{self.region}'>"
+        return f"<Alert id={self.id} title='{self.title}' region='{self.region}' severity='{self.severity}'>"
