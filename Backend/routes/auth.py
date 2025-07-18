@@ -29,18 +29,25 @@ def register():
 
     return jsonify({"message": "User registered successfully."}), 201
 
-#   Login
+#   Login -- ()
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-
     user = User.query.filter_by(email=data.get("email")).first()
 
     if not user or not user.check_password(data.get("password")):
         return jsonify({"error": "Invalid credentials"}), 401
 
-    token = create_access_token(identity=user.id, expires_delta=timedelta(hours=1))
+    # Including both id and is_admin in JWT
+    token = create_access_token(
+        identity={
+            "id": user.id,
+            "is_admin": user.is_admin
+        },
+        expires_delta=timedelta(hours=1)
+    )
+
     return jsonify({"access_token": token}), 200
 
 

@@ -6,11 +6,11 @@ from services.cloudinary_service import upload_file
 
 media_bp = Blueprint('media', __name__)
 
-@media_bp.route("/media", methods=["POST"])
+@media_bp.route("", methods=["POST"])
 @jwt_required()
 def upload_media():
-    current_user_id = get_jwt_identity()
-    user = User.query.get(current_user_id)
+    identity = get_jwt_identity()
+    user = User.query.get(identity["id"]) 
 
     if not user:
         return jsonify({"error": "User not found"}), 404
