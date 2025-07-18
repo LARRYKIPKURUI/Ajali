@@ -5,8 +5,9 @@ import os
 from config import Config
 from extensions import db, migrate, jwt
 from routes.auth import auth_bp
-from routes.media_route import media_bp
-# from routes.admin import admin_bp
+from routes.incident_route import incident_bp
+from routes.update_profile import update_profile_bp
+from routes.get_profile import get_profile_bp
 
 
 
@@ -24,10 +25,11 @@ def create_app():
 
     # Register blueprints 
     
-    app.register_blueprint(media_bp, url_prefix="/api/media")
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
+    app.register_blueprint(incident_bp, url_prefix="/api/incidents")
+    app.register_blueprint(update_profile_bp, url_prefix="/api/users")
+    app.register_blueprint(get_profile_bp, url_prefix="/api/users")
     
-    # app.register_blueprint(admin_bp, url_prefix="/api/admin")
 
     
 
