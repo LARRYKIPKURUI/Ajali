@@ -1,7 +1,9 @@
 from extensions import db
 from sqlalchemy_serializer import SerializerMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 
 #  User Model
+
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
@@ -20,6 +22,13 @@ class User(db.Model, SerializerMixin):
     incidents = db.relationship('Incident', backref='user', lazy=True)
     alerts_created = db.relationship('Alert', backref='creator', lazy=True)
     media = db.relationship('Media', backref='user', lazy=True)
+
+    # Password methods 
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return f"<User id={self.id} username='{self.username}' email='{self.email}'>"
