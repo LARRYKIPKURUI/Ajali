@@ -19,6 +19,8 @@ const Navbar = () => {
         navigate('/login');
     };
 
+   
+
     return (
         <header className="navbar">
             <div className="navbar-container">

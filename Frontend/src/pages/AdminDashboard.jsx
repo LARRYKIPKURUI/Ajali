@@ -1,6 +1,8 @@
 // src/pages/AdminDashboard.jsx
 import React, { useState } from 'react';
 import './AdminDashboard.css';
+import { Navigate } from 'react-router-dom';
+import { isLoggedIn, isAdmin} from '../utils/auth'
 
 const initialReports = [
   {
@@ -100,7 +102,7 @@ const AdminDashboard = () => {
                   </span>
                 </td>
                 <td className="action-buttons">
-                  <button onClick={() => handleEdit(report.id)} className="edit-btn">
+                  <button onClick={() => handleEdit(report)} className="edit-btn">
                     Edit
                   </button>
                   <button onClick={() => handleDelete(report.id)} className="delete-btn">
