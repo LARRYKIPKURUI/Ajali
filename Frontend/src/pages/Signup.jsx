@@ -5,9 +5,9 @@ import logo from '../assets/alerticon.png';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
-    fullName: '',
     username: '',
-    phone: '',
+    email: '',
+    phone_number: '',
     password: '',
     confirmPassword: '',
   });
@@ -16,15 +16,39 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
+    try {
+      const response = await fetch('http://localhost:5000/register', {
+        method: 'POST' ,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body:JSON.stringify({
+          username:formData.username,
+          email:formData.email,
+          phone_number:formData.phone_number,
+          password:formData.password,
+        }),
+      });
 
-    console.log('Signup form submitted:', formData);
-    // Connect to backend here
+      if (response.ok) {
+        const data= await response.json();
+        alert('signup successfull!');
+        console.log('Reponse:', data);
+      } else {
+        const error = await response.json();
+        alert(`Signup failed: ${error.message || 'Something went wrong'}`);
+      }
+    }catch (error) {
+      console.error('Signup error:', error);
+      alert('Server error. Please try again later');
+    };
   };
 
   return (
@@ -37,27 +61,27 @@ const Signup = () => {
 
         <input
           type="text"
-          name="fullName"
-          placeholder="Full Name"
-          value={formData.fullName}
-          onChange={handleChange}
-          required
-        />
-
-        <input
-          type="text"
           name="username"
-          placeholder="Username or Email"
+          placeholder="Username"
           value={formData.username}
           onChange={handleChange}
           required
         />
 
         <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+
+        <input
           type="tel"
-          name="phone"
+          name="phone_number"
           placeholder="Phone Number"
-          value={formData.phone}
+          value={formData.phone_number}
           onChange={handleChange}
           required
         />
