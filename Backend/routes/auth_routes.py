@@ -1,4 +1,7 @@
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from utils.token_utils import generate_token
+access_token = generate_token(user.id)
+
 
 @auth_bp.route('/profile', methods=['GET'])
 @jwt_required()
