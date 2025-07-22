@@ -5,6 +5,14 @@ name = "pypi"
 
 [packages]
 flask = "*"
+flask-sqlalchemy = "*"
+sqlalchemy-serializer = "*"
+routes = "*"
+twillio = "*"
+requests = "*"
+python-dotenv = "*"
+smtplib = "*"
+email.message = "*"
 
 [dev-packages]
 
