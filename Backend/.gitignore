@@ -11,3 +11,7 @@ __pycache__/
 
 #Code for creatin token
 generate_token.py
+
+
+#vs code files
+.vscode/
