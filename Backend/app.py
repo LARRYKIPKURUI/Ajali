@@ -1,19 +1,37 @@
 from flask import Flask
+from flask_cors import CORS
+from dotenv import load_dotenv
+import os
 from config import Config
-from models.models import db
-from routes.auth import auth_bp  # example route
+from extensions import db, migrate, jwt
+from routes.auth import auth_bp
+from routes.incident_route import incident_bp
+from routes.update_profile import update_profile_bp
+from routes.get_profile import get_profile_bp
+
+
+
+load_dotenv()
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
+    # Initialize extensions
     db.init_app(app)
+    migrate.init_app(app, db)
+    jwt.init_app(app)
+    CORS(app)
 
-    # Register blueprints
-    app.register_blueprint(auth_bp)
+    # Register blueprints 
+    
+    app.register_blueprint(auth_bp, url_prefix="/api/auth")
+    app.register_blueprint(incident_bp, url_prefix="/api/incidents")
+    app.register_blueprint(update_profile_bp, url_prefix="/api/users")
+    app.register_blueprint(get_profile_bp, url_prefix="/api/users")
+    
 
-    with app.app_context():
-        db.create_all()  # creates tables
+    
 
     return app
 
