@@ -1,19 +1,40 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import logo from '../assets/alerticon.png';
 
 const Login = () => {
-  const [formData, setFormData] = useState({ username: '', password: '' });
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({ email: '', password: '' });
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Login submitted:', formData);
-    // connect to backend 
+
+    try {
+      const response = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('isAdmin', data.user.is_admin);
+        alert('Login successful!');
+        navigate(data.user.is_admin ? '/admin' : '/profile')
+      } else {
+        const error = await response.json();
+        alert(`Login failed: ${error.error || 'Please try again.'}`);
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('Server error. Please try again later.');
+    }
   };
 
   return (
@@ -25,10 +46,10 @@ const Login = () => {
         </div>
 
         <input
-          type="text"
-          name="username"
-          placeholder="Username or Email"
-          value={formData.username}
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
           onChange={handleChange}
           required
         />
