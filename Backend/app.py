@@ -17,6 +17,8 @@ from routes.upload_routes import upload_bp
 from routes.test_email import test_email_bp
 from routes.test_sms import test_sms_bp
 
+
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
