@@ -17,10 +17,17 @@ const Map = () => {
 
   useEffect(() => {
     // Fetch incidents from backend
-    fetch('http://localhost:5000/incidents')
-      .then((res) => res.json())
-      .then((data) => setIncidents(data))
-      .catch((err) => console.error('Error fetching incidents:', err));
+   fetch('http://localhost:5000/api/incidents')
+  .then(async (res) => {
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error('API Error:', errorData);
+      return;
+    }
+    const data = await res.json();
+    setIncidents(data.incidents);
+  })
+  .catch((err) => console.error('Error fetching incidents:', err));
 
     // Try to get user's location
     if (navigator.geolocation) {
