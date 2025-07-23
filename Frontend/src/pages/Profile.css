@@ -50,3 +50,110 @@
 .profile-btn:hover {
   opacity: 0.9;
 }
+
+.profile-section {
+  padding: 2rem;
+  background-color: #f9f9f9;
+  min-height: 90vh;
+}
+
+.profile-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+.profile-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.profile-card p {
+  margin: 0.5rem 0;
+  font-size: 16px;
+  color: #444;
+}
+
+.profile-actions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.profile-btn {
+  flex: 1;
+  padding: 0.7rem;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.profile-btn:hover {
+  background-color: #0056b3;
+}
+
+.logout {
+  background-color: #dc3545;
+}
+
+.logout:hover {
+  background-color: #b02a37;
+}
+
+/* Styling for edit form */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.edit-form label {
+  font-weight: bold;
+  color: #333;
+}
+
+.edit-form input {
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  outline: none;
+}
+
+.edit-form input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.edit-form button {
+  padding: 0.7rem;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #28a745;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.edit-form button:hover {
+  background-color: #218838;
+}
+
+.edit-form button[type="button"] {
+  background-color: #6c757d;
+}
+
+.edit-form button[type="button"]:hover {
+  background-color: #5a6268;
+}

@@ -36,7 +36,7 @@ element={
   />
   
   <Route
-  path= 'admin'
+  path= '/admin'
   element={
     <AdminRoute>
       <AdminDashboard />

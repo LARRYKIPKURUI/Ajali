@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import logo from '../assets/alerticon.png';
+import { jwtDecode } from 'jwt-decode'; // Correct named import
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/login', {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -23,10 +24,18 @@ const Login = () => {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('token', data.access_token);
-        localStorage.setItem('isAdmin', data.user.is_admin);
+        const token = data.access_token;
+
+        localStorage.setItem('token', token);
+
+        // Decode the token to get role info
+        const decoded = jwtDecode(token);
+        const isAdmin = decoded.is_admin; // use correct key
+
+        localStorage.setItem('isAdmin', isAdmin);
+
         alert('Login successful!');
-        navigate(data.user.is_admin ? '/admin' : '/profile')
+        navigate(isAdmin ? '/admin' : '/profile');
       } else {
         const error = await response.json();
         alert(`Login failed: ${error.error || 'Please try again.'}`);
