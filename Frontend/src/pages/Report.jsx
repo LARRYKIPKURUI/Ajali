@@ -23,6 +23,7 @@ const Report = () => {
     console.log(formData);
     // Placeholder – will connect to backend later
   };
+  const [markerPos, setMarkerPos] = useState(null);
 
   return (
     <section className="report-section">
