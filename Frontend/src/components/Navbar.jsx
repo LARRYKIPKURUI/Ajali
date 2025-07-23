@@ -19,6 +19,17 @@ const Navbar = () => {
         navigate('/login');
     };
 
+    {isLoggedIn && (
+  <button className="logout-btn" onClick={() => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('isAdmin');
+    navigate('/login');
+  }}>
+    Logout
+  </button>
+)}
+
+
    
 
     return (

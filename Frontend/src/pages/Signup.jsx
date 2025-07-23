@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Signup.css';
 import logo from '../assets/alerticon.png';
+import { jwtDecode } from 'jwt-decode';
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -23,32 +25,61 @@ const Signup = () => {
       alert('Passwords do not match!');
       return;
     }
+
     try {
-      const response = await fetch('http://localhost:5000/register', {
-        method: 'POST' ,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body:JSON.stringify({
-          username:formData.username,
-          email:formData.email,
-          phone_number:formData.phone_number,
-          password:formData.password,
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: formData.username,
+          email: formData.email,
+          phone_number: formData.phone_number,
+          password: formData.password,
         }),
       });
 
       if (response.ok) {
-        const data= await response.json();
-        alert('signup successfull!');
-        console.log('Reponse:', data);
+        const data = await response.json();
+        alert('Signup successful! Logging you in...');
+
+        // Login immediately after signup
+        const loginResponse = await fetch('http://localhost:5000/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        });
+
+        if (loginResponse.ok) {
+          const loginData = await loginResponse.json();
+          const token = loginData.access_token;
+
+          // Save token
+          localStorage.setItem('token', token);
+
+          // Decode token to check role
+          const decoded = jwtDecode(token);
+          const isAdmin = decoded.is_admin;
+
+          localStorage.setItem('isAdmin', isAdmin);
+
+          // Redirect to profile or admin dashboard
+          navigate(isAdmin ? '/admin' : '/profile');
+        } else {
+          alert('Signup succeeded but login failed. Please log in manually.');
+          navigate('/login');
+        }
+
       } else {
         const error = await response.json();
         alert(`Signup failed: ${error.message || 'Something went wrong'}`);
       }
-    }catch (error) {
+    } catch (error) {
       console.error('Signup error:', error);
       alert('Server error. Please try again later');
-    };
+    }
   };
 
   return (
