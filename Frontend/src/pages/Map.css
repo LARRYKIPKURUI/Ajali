@@ -1,7 +1,113 @@
-.map-container {
-  margin: 2rem auto;
-  width: 95%;
-  border: 2px solid #ddd;
+.live-map-section {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 0.2rem;
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.map-layout {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.map-card {
+  flex: 2;
+  min-height: 400px;
+  background-color: #f9f9f9;
   border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
+}
+
+.incident-list {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.incident-list h3 {
+  margin-bottom: 0.5rem;
+}
+
+.incident-card {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
+}
+
+.incident-card:hover {
+  transform: scale(1.01);
+}
+
+.incident-icon {
+  font-size: 1.8rem;
+}
+
+.incident-info p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.incident-meta {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.incident-tags {
+  margin-left: auto;
+  text-align: right;
+}
+
+.severity-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #fff;
+  display: inline-block;
+  margin-bottom: 0.3rem;
+}
+
+.severity-badge.high {
+  background-color: #f44336;
+}
+.severity-badge.medium {
+  background-color: #ffa000;
+}
+.severity-badge.critical {
+  background-color: #6a1b9a;
+}
+
+.reports {
+  font-size: 0.75rem;
+  color: #444;
+}
+
+@media (max-width: 768px) {
+  .map-layout {
+    flex-direction: column;
+  }
 }

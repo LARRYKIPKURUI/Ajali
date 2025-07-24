@@ -2,9 +2,11 @@ import React from 'react';
 import './Home.css';
 import heroImage from '../assets/alerticon.png'; 
 import { Link } from 'react-router-dom';
+import About from './About';
 
 const Home = () => {
   return (
+    <>
     <section className="home-section">
       <div className="home-container">
         <div className="home-text">
@@ -17,6 +19,8 @@ const Home = () => {
         </div>
       </div>
     </section>
+    <About />
+    </>
   );
 };
 
