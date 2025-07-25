@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation, Link } from 'react-router-dom';
 import './Navbar.css';
 import logo from '../assets/alerticon.png';
 
@@ -48,16 +48,9 @@ const Navbar = () => {
 
         <div className="navbar-links">
           <div className="center-links">
-<a
-  href="/"
-  className="nav-link"
-  onClick={(e) => {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }}
->
+<Link to="/" className="nav-link" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
   Home
-</a>            <button onClick={handleAboutClick} className="nav-button">About</button>
+</Link>           <button onClick={handleAboutClick} className="nav-button">About</button>
             {isLoggedIn && (
               <>
                 <NavLink to="/report" className={({ isActive }) => isActive ? 'active-link' : ''}>Report</NavLink>

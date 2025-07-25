@@ -1,10 +1,28 @@
 import React from 'react';
 import './Home.css';
 import heroImage from '../assets/alerticon.png'; 
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import About from './About';
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleGoogleLogin = () => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id: "horizontal-oath-467019-h4",
+      callback: (response) => {
+        const credential = response.credential;
+
+        // Optional: Send token to backend for verification
+        localStorage.setItem('google_token', credential);
+        navigate('/report');
+      },
+    });
+
+    google.accounts.id.prompt(); // triggers the popup
+  };
+
   return (
     <>
       <section className="home-section">
@@ -12,8 +30,9 @@ const Home = () => {
           <div className="home-text">
             <h1>Report Emergencies Fast with <span>Ajali!</span></h1>
             <p>Be the hero in your community. Report accidents, fires, and security threats in real-time and help save lives.</p>
-            {/* Redirects to Signup instead of Report */}
-            <Link to="/signup" className="report-btn">Report Incident</Link>
+            <button className="report-btn" onClick={handleGoogleLogin}>
+              Report Incident
+            </button>
           </div>
           <div className="home-image">
             <img src={heroImage} alt="Emergency illustration" />
