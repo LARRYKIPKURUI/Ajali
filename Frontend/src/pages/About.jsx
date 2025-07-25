@@ -5,7 +5,7 @@ import { faUsers, faBookOpen, faShieldAlt } from '@fortawesome/free-solid-svg-ic
 
 const About = () => {
   return (
-    <section className="about-section">
+    <section className="about-section" id="about-section">
       <div className="about-container">
         <div className="about-bullets">
           <div className="bullet-item">
