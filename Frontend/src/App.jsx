@@ -11,7 +11,6 @@ import Footer from './components/Footer'
 import AdminDashboard from './pages/AdminDashboard';
 import PrivateRoute from './components/PrivateRoute';
 import AdminRoute from './components/AdminRoute';
-import About from './pages/About';
 
 
 
