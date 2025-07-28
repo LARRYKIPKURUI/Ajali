@@ -1,10 +1,30 @@
 import React from 'react';
 import './Home.css';
 import heroImage from '../assets/alerticon.png'; 
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth } from '../firebase'; 
 import About from './About';
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const token = await user.getIdToken();
+
+      localStorage.setItem('token', token);
+      localStorage.setItem('userName', user.displayName);
+
+      navigate('/report');
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+    }
+  };
+
   return (
     <>
       <section className="home-section">
@@ -12,8 +32,9 @@ const Home = () => {
           <div className="home-text">
             <h1>Report Emergencies Fast with <span>Ajali!</span></h1>
             <p>Be the hero in your community. Report accidents, fires, and security threats in real-time and help save lives.</p>
-            {/* Redirects to Signup instead of Report */}
-            <Link to="/signup" className="report-btn">Report Incident</Link>
+            <button className="report-btn" onClick={handleGoogleLogin}>
+              Report Incident
+            </button>
           </div>
           <div className="home-image">
             <img src={heroImage} alt="Emergency illustration" />
