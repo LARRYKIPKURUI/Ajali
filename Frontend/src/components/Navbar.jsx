@@ -6,19 +6,25 @@ import logo from '../assets/alerticon.png';
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userInitial, setUserInitial] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    const userName = localStorage.getItem('userName');
     setIsLoggedIn(!!token);
-  }, []);
+
+    if (userName) {
+      setUserInitial(userName.charAt(0).toUpperCase());
+    }
+  }, [location]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('isAdmin');
+    localStorage.removeItem('userName');
     setIsLoggedIn(false);
-    navigate('/login');
+    navigate('/');
   };
 
   const handleAboutClick = () => {
@@ -26,15 +32,11 @@ const Navbar = () => {
       navigate("/");
       setTimeout(() => {
         const section = document.getElementById("about-section");
-        if (section) {
-          section.scrollIntoView({ behavior: "smooth" });
-        }
+        if (section) section.scrollIntoView({ behavior: "smooth" });
       }, 200);
     } else {
       const section = document.getElementById("about-section");
-      if (section) {
-        section.scrollIntoView({ behavior: "smooth" });
-      }
+      if (section) section.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -48,32 +50,28 @@ const Navbar = () => {
 
         <div className="navbar-links">
           <div className="center-links">
-<a
-  href="/"
-  className="nav-link"
-  onClick={(e) => {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }}
->
-  Home
-</a>            <button onClick={handleAboutClick} className="nav-button">About</button>
+            <NavLink to="/" className="logout-btn">Home</NavLink>
+            <button onClick={handleAboutClick} className="logout-btn">About</button>
+
             {isLoggedIn && (
               <>
-                <NavLink to="/report" className={({ isActive }) => isActive ? 'active-link' : ''}>Report</NavLink>
-                <NavLink to="/map" className={({ isActive }) => isActive ? 'active-link' : ''}>Map</NavLink>
-                <NavLink to="/profile" className={({ isActive }) => isActive ? 'active-link' : ''}>Profile</NavLink>
+                <NavLink to="/report" className="logout-btn">Report</NavLink>
+                <NavLink to="/map" className="logout-btn">Map</NavLink>
+                <NavLink to="/profile" className="logout-btn">Profile</NavLink>
               </>
             )}
           </div>
 
           <div className="auth-links">
             {isLoggedIn ? (
-              <button onClick={handleLogout} className="logout-btn">Logout</button>
+              <>
+                <div className="user-circle">{userInitial}</div>
+                <button onClick={handleLogout} className="logout-btn">Logout</button>
+              </>
             ) : (
               <>
-                <NavLink to="/login" className={({ isActive }) => isActive ? 'active-link' : ''}>Login</NavLink>
-                <NavLink to="/signup" className={({ isActive }) => isActive ? 'active-link' : ''}>Signup</NavLink>
+                <NavLink to="/login" className="logout-btn">Login</NavLink>
+                <NavLink to="/signup" className="logout-btn">Signup</NavLink>
               </>
             )}
           </div>
@@ -91,23 +89,22 @@ const Navbar = () => {
 
       {isMenuOpen && (
         <div className="navbar-mobile">
-          <NavLink to="/" onClick={() => setIsMenuOpen(false)}>Home</NavLink>
-          <button onClick={() => {
-            handleAboutClick();
-            setIsMenuOpen(false);
-          }}>About</button>
+          <NavLink to="/" className="logout-btn" onClick={() => setIsMenuOpen(false)}>Home</NavLink>
+          <button onClick={() => { handleAboutClick(); setIsMenuOpen(false); }} className="logout-btn">About</button>
+
           {isLoggedIn && (
             <>
-              <NavLink to="/report" onClick={() => setIsMenuOpen(false)}>Report</NavLink>
-              <NavLink to="/map" onClick={() => setIsMenuOpen(false)}>Map</NavLink>
-              <NavLink to="/profile" onClick={() => setIsMenuOpen(false)}>Profile</NavLink>
+              <NavLink to="/report" className="logout-btn" onClick={() => setIsMenuOpen(false)}>Report</NavLink>
+              <NavLink to="/map" className="logout-btn" onClick={() => setIsMenuOpen(false)}>Map</NavLink>
+              <NavLink to="/profile" className="logout-btn" onClick={() => setIsMenuOpen(false)}>Profile</NavLink>
               <button onClick={() => { handleLogout(); setIsMenuOpen(false); }} className="logout-btn">Logout</button>
             </>
           )}
+
           {!isLoggedIn && (
             <>
-              <NavLink to="/login" onClick={() => setIsMenuOpen(false)}>Login</NavLink>
-              <NavLink to="/signup" onClick={() => setIsMenuOpen(false)}>Signup</NavLink>
+              <NavLink to="/login" className="logout-btn" onClick={() => setIsMenuOpen(false)}>Login</NavLink>
+              <NavLink to="/signup" className="logout-btn" onClick={() => setIsMenuOpen(false)}>Signup</NavLink>
             </>
           )}
         </div>
