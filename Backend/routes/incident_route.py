@@ -3,6 +3,8 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from extensions import db
 from models.models import User, Incident, Media
 from services.cloudinary_service import upload_file
+from utils.email import send_email
+from utils.sms import send_sms
 
 incident_bp = Blueprint("incidents", __name__)
 
@@ -41,7 +43,7 @@ def create_incident():
     )
 
     db.session.add(incident)
-    db.session.flush()  # needed to access incident.id before full commit
+    db.session.flush()  # Access incident.id before committing
 
     # Upload to Cloudinary
     upload_result = upload_file(file)
