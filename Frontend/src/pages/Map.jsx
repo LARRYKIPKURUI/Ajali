@@ -65,7 +65,6 @@ const Map = () => {
       </p>
 
       <div className="map-layout">
-        {/* LEFT: Interactive Map */}
         <div className="map-card">
           <MapContainer
             center={userLocation || [-1.286389, 36.817223]}
