@@ -9,7 +9,7 @@ def test_email():
         send_email(
             recipient="githinjikelvin74@gmail.com",
             subject="Ajali System Email Test",
-            body="✅ This is a test email from the Ajali Emergency Backend System."
+            body=" This is a test email from the Ajali Emergency Backend System."
         )
         return jsonify({"message": "Test email sent successfully!"}), 200
     except Exception as e:

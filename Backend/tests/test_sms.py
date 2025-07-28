@@ -8,7 +8,7 @@ def test_sms():
     try:
         send_sms(
             to="+254786197407",  # Your own number in international format
-            body="✅ This is a test SMS from the Ajali Emergency System."
+            body="This is a test SMS from the Ajali Emergency System."
         )
         return jsonify({"message": "Test SMS sent successfully!"}), 200
     except Exception as e:
