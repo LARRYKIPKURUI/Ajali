@@ -1,48 +1,45 @@
+# utils/notification_utils.py
+
 import os
-import smtplib
-from email.mime.text import MIMEText
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 from twilio.rest import Client
 from dotenv import load_dotenv
 
+# Load environment variables
 load_dotenv()
 
-# Email notification
-def send_email_notification(to_email, subject, message_body):
-    smtp_server = os.getenv("SMTP_SERVER")
-    smtp_port = int(os.getenv("SMTP_PORT", 587))
-    smtp_username = os.getenv("SMTP_USERNAME")
-    smtp_password = os.getenv("SMTP_PASSWORD")
-    from_email = os.getenv("FROM_EMAIL")
-
+# Email sending via SendGrid
+def send_email(to, subject, body):
     try:
-        msg = MIMEText(message_body)
-        msg["Subject"] = subject
-        msg["From"] = from_email
-        msg["To"] = to_email
-
-        with smtplib.SMTP(smtp_server, smtp_port) as server:
-            server.starttls()
-            server.login(smtp_username, smtp_password)
-            server.send_message(msg)
-
-        return True, "Email sent successfully"
+        message = Mail(
+            from_email=os.getenv("FROM_EMAIL"),
+            to_emails=to,
+            subject=subject,
+            html_content=body
+        )
+        sg = SendGridAPIClient(api_key=os.getenv("SENDGRID_API_KEY"))
+        response = sg.send(message)
+        return response.status_code
     except Exception as e:
-        return False, str(e)
+        print(f"[SendGrid Error] {str(e)}")
+        return None
 
 
-# SMS notification using Twilio
-def send_sms_notification(to_number, message_body):
-    account_sid = os.getenv("TWILIO_ACCOUNT_SID")
-    auth_token = os.getenv("TWILIO_AUTH_TOKEN")
-    from_number = os.getenv("TWILIO_PHONE_NUMBER")
-
+# SMS sending via Twilio
+def send_sms(phone_number, message):
     try:
+        account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+        auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+        from_number = os.getenv("TWILIO_PHONE_NUMBER")
+
         client = Client(account_sid, auth_token)
         message = client.messages.create(
-            body=message_body,
+            body=message,
             from_=from_number,
-            to=to_number
+            to=phone_number
         )
-        return True, message.sid
+        return message.sid
     except Exception as e:
-        return False, str(e)
+        print(f"[Twilio Error] {str(e)}")
+        return None

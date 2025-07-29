@@ -14,8 +14,8 @@ from routes.incident_route import incident_bp
 from routes.update_profile import update_profile_bp
 from routes.get_profile import get_profile_bp
 from routes.upload_routes import upload_bp
-from tests.test_email import test_email_bp
-from tests.test_sms import test_sms_bp
+from utils.test_notification_utils import test_email_bp, test_sms_bp
+
 
 
 
