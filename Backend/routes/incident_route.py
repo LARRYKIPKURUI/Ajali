@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from extensions import db
 from models.models import User, Incident, Media
 from services.cloudinary_service import upload_file
+from utils.notification_utils import send_sms, send_email
 
 incident_bp = Blueprint("incidents", __name__)
 
@@ -41,7 +42,7 @@ def create_incident():
     )
 
     db.session.add(incident)
-    db.session.flush()  # needed to access incident.id before full commit
+    db.session.flush()  # Access incident.id before committing
 
     # Upload to Cloudinary
     upload_result = upload_file(file)
@@ -61,6 +62,16 @@ def create_incident():
 
     db.session.add(media)
     db.session.commit()
+
+    notif_msg = f"""
+    New Incident Reported:
+    Title: {incident.title}
+    Location: {incident.location_description or 'Unknown'}
+    Reported By: {user.username}
+    """
+
+    send_email_notification("Ajali Alert: New Incident", notif_msg)
+    send_sms_notification(notif_msg)
 
     return jsonify({
         "message": "Incident reported successfully",
