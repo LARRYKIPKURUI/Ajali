@@ -1,2 +1,17 @@
-#Enviroment Variables
+# Virtual environment
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment variables
 .env
+
+#Code for creatin token
+generate_token.py
+
+
+#vs code files
+.vscode/
