@@ -1,5 +1,3 @@
-# utils/test_notification_utils.py
-
 from flask import Blueprint, jsonify
 from utils.notification_utils import send_email, send_sms
 
