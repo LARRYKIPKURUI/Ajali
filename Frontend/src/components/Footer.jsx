@@ -43,7 +43,7 @@ const Footer = () => {
     <a href="https://facebook.com/" target="_blank" rel="noreferrer">
       <FaFacebookF className="social-icon" />
     </a>
-  </div>
+  </div>
 </div>
 </div>
 
