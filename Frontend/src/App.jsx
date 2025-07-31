@@ -11,6 +11,7 @@ import Footer from './components/Footer'
 import AdminDashboard from './pages/AdminDashboard';
 import PrivateRoute from './components/PrivateRoute';
 import AdminRoute from './components/AdminRoute';
+import About from './pages/About';
 
 
 
@@ -23,7 +24,13 @@ import AdminRoute from './components/AdminRoute';
         <Route path="/report" element={<Report />} />
         <Route path="/map" element={<Map />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/about" element={<About />} />
         <Route path="/signup" element={<Signup />} />
+        
+
+        
+        
+
 
 
 <Route

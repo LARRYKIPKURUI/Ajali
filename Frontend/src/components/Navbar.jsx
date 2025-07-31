@@ -27,19 +27,6 @@ const Navbar = () => {
     navigate('/');
   };
 
-  const handleAboutClick = () => {
-    if (location.pathname !== "/") {
-      navigate("/");
-      setTimeout(() => {
-        const section = document.getElementById("about-section");
-        if (section) section.scrollIntoView({ behavior: "smooth" });
-      }, 200);
-    } else {
-      const section = document.getElementById("about-section");
-      if (section) section.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
     <header className="navbar">
       <div className="navbar-container">
@@ -50,14 +37,14 @@ const Navbar = () => {
 
         <div className="navbar-links">
           <div className="center-links">
-            <NavLink to="/" className="logout-btn">Home</NavLink>
-            <button onClick={handleAboutClick} className="logout-btn">About</button>
+            <NavLink to="/" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`}>Home</NavLink>
+            <NavLink to="/about" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`}>About</NavLink>
 
             {isLoggedIn && (
               <>
-                <NavLink to="/report" className="logout-btn">Report</NavLink>
-                <NavLink to="/map" className="logout-btn">Map</NavLink>
-                <NavLink to="/profile" className="logout-btn">Profile</NavLink>
+                <NavLink to="/report" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`}>Report</NavLink>
+                <NavLink to="/map" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`}>Map</NavLink>
+                <NavLink to="/profile" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`}>Profile</NavLink>
               </>
             )}
           </div>
@@ -70,8 +57,8 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <NavLink to="/login" className="logout-btn">Login</NavLink>
-                <NavLink to="/signup" className="logout-btn">Signup</NavLink>
+                <NavLink to="/login" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`}>Login</NavLink>
+                <NavLink to="/signup" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`}>Signup</NavLink>
               </>
             )}
           </div>
@@ -89,22 +76,22 @@ const Navbar = () => {
 
       {isMenuOpen && (
         <div className="navbar-mobile">
-          <NavLink to="/" className="logout-btn" onClick={() => setIsMenuOpen(false)}>Home</NavLink>
-          <button onClick={() => { handleAboutClick(); setIsMenuOpen(false); }} className="logout-btn">About</button>
+          <NavLink to="/" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Home</NavLink>
+          <NavLink to="/about" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>About</NavLink>
 
           {isLoggedIn && (
             <>
-              <NavLink to="/report" className="logout-btn" onClick={() => setIsMenuOpen(false)}>Report</NavLink>
-              <NavLink to="/map" className="logout-btn" onClick={() => setIsMenuOpen(false)}>Map</NavLink>
-              <NavLink to="/profile" className="logout-btn" onClick={() => setIsMenuOpen(false)}>Profile</NavLink>
+              <NavLink to="/report" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Report</NavLink>
+              <NavLink to="/map" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Map</NavLink>
+              <NavLink to="/profile" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Profile</NavLink>
               <button onClick={() => { handleLogout(); setIsMenuOpen(false); }} className="logout-btn">Logout</button>
             </>
           )}
 
           {!isLoggedIn && (
             <>
-              <NavLink to="/login" className="logout-btn" onClick={() => setIsMenuOpen(false)}>Login</NavLink>
-              <NavLink to="/signup" className="logout-btn" onClick={() => setIsMenuOpen(false)}>Signup</NavLink>
+              <NavLink to="/login" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Login</NavLink>
+              <NavLink to="/signup" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Signup</NavLink>
             </>
           )}
         </div>
