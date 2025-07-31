@@ -87,7 +87,7 @@ def create_incident():
 
     # Notification content
     notif_msg = f"""
-    🚨 New Incident Reported 🚨
+    New Incident Reported 
     Title: {incident.title}
     Location: {incident.location_description or f"{incident.latitude}, {incident.longitude}"}
     Reported By: {user.username}
