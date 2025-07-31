@@ -13,38 +13,10 @@ L.Icon.Default.mergeOptions({
 
 const Map = () => {
   const [userLocation, setUserLocation] = useState(null);
-
-  const placeholderIncidents = [
-    {
-      id: 1,
-      title: 'Traffic Accident',
-      location: 'Uhuru Highway, Nairobi',
-      time: '5 minutes ago',
-      severity: 'High',
-      reports: 12,
-      icon: '🔺',
-    },
-    {
-      id: 2,
-      title: 'Medical Emergency',
-      location: 'Kenyatta Avenue, Nairobi',
-      time: '15 minutes ago',
-      severity: 'Critical',
-      reports: 8,
-      icon: '🚑',
-    },
-    {
-      id: 3,
-      title: 'Road Closure',
-      location: 'Mombasa Road, Nairobi',
-      time: '30 minutes ago',
-      severity: 'Medium',
-      reports: 5,
-      icon: '⚠️',
-    },
-  ];
+  const [incidents, setIncidents] = useState([]);
 
   useEffect(() => {
+    // Get user location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
@@ -55,6 +27,20 @@ const Map = () => {
         }
       );
     }
+
+    // Fetch incidents from backend
+    const fetchIncidents = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/incidents');
+        const data = await res.json();
+        // if the backend returns { incidents: [...] }
+        setIncidents(data.incidents || data);
+      } catch (err) {
+        console.error('Failed to fetch incidents:', err);
+      }
+    };
+
+    fetchIncidents();
   }, []);
 
   return (
@@ -65,6 +51,7 @@ const Map = () => {
       </p>
 
       <div className="map-layout">
+        {/* LEFT: MAP */}
         <div className="map-card">
           <MapContainer
             center={userLocation || [-1.286389, 36.817223]}
@@ -75,33 +62,55 @@ const Map = () => {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution='&copy; OpenStreetMap contributors'
             />
+
             {userLocation && (
               <Marker position={userLocation}>
                 <Popup>You are here</Popup>
               </Marker>
             )}
+
+            {incidents.map((incident) => (
+              <Marker
+                key={incident.id}
+                position={[incident.latitude, incident.longitude]}
+              >
+                <Popup>
+                  <strong>{incident.title}</strong>
+                  <br />
+                  {incident.description}
+                  <br />
+                  <em>Reported: {new Date(incident.created_at).toLocaleString()}</em>
+                </Popup>
+              </Marker>
+            ))}
           </MapContainer>
         </div>
 
         {/* RIGHT: Recent Incidents */}
         <div className="incident-list">
           <h3>Recent Incidents</h3>
-          {placeholderIncidents.map((incident) => (
-            <div className="incident-card" key={incident.id}>
-              <div className="incident-icon">{incident.icon}</div>
-              <div className="incident-info">
-                <strong>{incident.title}</strong>
-                <p>{incident.location}</p>
-                <span className="incident-meta">{incident.time}</span>
+          {incidents.length > 0 ? (
+            incidents.map((incident) => (
+              <div className="incident-card" key={incident.id}>
+                <div className="incident-icon">🚨</div>
+                <div className="incident-info">
+                  <strong>{incident.title}</strong>
+                  <p>{incident.description}</p>
+                  <span className="incident-meta">
+                    {new Date(incident.created_at).toLocaleTimeString()}
+                  </span>
+                </div>
+                <div className="incident-tags">
+                  <span className={`severity-badge ${incident.type?.toLowerCase()}`}>
+                    {incident.type}
+                  </span>
+                  <span className="reports">User ID: {incident.user_id}</span>
+                </div>
               </div>
-              <div className="incident-tags">
-                <span className={`severity-badge ${incident.severity.toLowerCase()}`}>
-                  {incident.severity}
-                </span>
-                <span className="reports">{incident.reports} reports</span>
-              </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p>No incidents reported yet.</p>
+          )}
         </div>
       </div>
     </section>
