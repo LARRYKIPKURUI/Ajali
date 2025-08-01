@@ -5,13 +5,9 @@
 }
 
 .about-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 4rem;
-  flex-wrap: wrap;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 1rem;
 }
 
 .about-bullets {
@@ -70,4 +66,35 @@
     flex-direction: column;
     gap: 3rem;
   }
+}
+
+.about-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .about-top {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hotline-buttons {
+  display: flex;
+  gap: 5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.hotline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.hotline-icon {
+  font-size: 1.2rem;
 }

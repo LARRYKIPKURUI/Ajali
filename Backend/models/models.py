@@ -44,17 +44,18 @@ class Incident(db.Model, SerializerMixin):
     description = db.Column(db.Text, nullable=False)
     latitude = db.Column(db.Float, nullable=False, index=True)
     longitude = db.Column(db.Float, nullable=False, index=True)
+    location_name = db.Column(db.String(255), nullable=True)  # New field
     is_critical = db.Column(db.Boolean, default=False)
-    status = db.Column(db.String(50), default='submitted')  # resolved, rejected, pending
+    status = db.Column(db.String(50), default='submitted')
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    # Relationships
     media = db.relationship('Media', backref='incident', lazy=True)
 
     def __repr__(self):
         return f"<Incident id={self.id} title='{self.title}' status='{self.status}' user_id={self.user_id}>"
+
 
 
 #  Media Model 

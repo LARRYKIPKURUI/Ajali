@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 import logo from '../assets/alerticon.png';
-import { jwtDecode } from 'jwt-decode'; 
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,10 +28,8 @@ const Login = () => {
         const token = data.access_token;
 
         localStorage.setItem('token', token);
-
-        // Decode the token to get role info
         const decoded = jwtDecode(token);
-        const isAdmin = decoded.is_admin; // use correct key
+        const isAdmin = decoded.is_admin;
 
         localStorage.setItem('isAdmin', isAdmin);
 
@@ -63,14 +62,19 @@ const Login = () => {
           required
         />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+        <div className="password-wrapper">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <span onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? '🙈' : '👁'}
+          </span>
+        </div>
 
         <button type="submit">Log In</button>
 
