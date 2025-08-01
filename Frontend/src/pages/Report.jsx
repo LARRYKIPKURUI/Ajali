@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Report.css';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { showSuccess, showError, showWarning } from '../utils/alerts';
 
-// Fix leaflet icon issue
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
@@ -30,7 +30,25 @@ const Report = () => {
   });
 
   const [markerPos, setMarkerPos] = useState(null);
+  const [mapCenter, setMapCenter] = useState([-1.286389, 36.817223]); // Default to Nairobi
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Get user's current location on page load
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const userLatLng = { lat: latitude, lng: longitude };
+          setMarkerPos(userLatLng);
+          setMapCenter([latitude, longitude]);
+        },
+        (error) => {
+          console.error('Geolocation error:', error);
+        }
+      );
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, files, type, checked } = e.target;
@@ -48,25 +66,25 @@ const Report = () => {
 
     const token = localStorage.getItem('token');
     if (!token) {
-      alert('You must be logged in to report an incident.');
+      showWarning('Authentication Required', 'You must be logged in to report an incident.');
       return;
     }
 
     if (!markerPos) {
-      alert('Please select a location on the map.');
+      showWarning('Location Missing', 'Please select a location on the map.');
       return;
     }
 
     const form = new FormData();
     form.append('type', formData.category);
-    form.append('title', formData.title || 'Untitled Incident'); // required
+    form.append('title', formData.title || 'Untitled Incident');
     form.append('description', formData.description);
     form.append('latitude', markerPos.lat);
     form.append('longitude', markerPos.lng);
     form.append('is_critical', formData.is_critical.toString());
 
     if (formData.media) {
-      form.append('file', formData.media); // required by backend
+      form.append('file', formData.media);
     }
 
     setIsSubmitting(true);
@@ -82,8 +100,10 @@ const Report = () => {
 
       if (response.ok) {
         const data = await response.json();
-        alert('Incident reported successfully!');
+        showSuccess('Success', 'Incident reported successfully!');
         console.log(data);
+
+        // Reset form
         setFormData({
           category: '',
           title: '',
@@ -94,11 +114,11 @@ const Report = () => {
         setMarkerPos(null);
       } else {
         const error = await response.json();
-        alert(`Error: ${error.error || 'Something went wrong.'}`);
+        showError('Submission Failed', error.error || 'Something went wrong.');
       }
     } catch (err) {
       console.error('Submission error:', err);
-      alert('Server error. Please try again later.');
+      showError('Server Error', 'Please try again later.');
     } finally {
       setIsSubmitting(false);
     }
@@ -142,14 +162,21 @@ const Report = () => {
           <input type="checkbox" name="is_critical" checked={formData.is_critical} onChange={handleChange} />
 
           <label>Location</label>
-          <MapContainer center={[-1.286389, 36.817223]} zoom={13} style={{ height: '300px', marginBottom: '1rem' }}>
+          <MapContainer center={mapCenter} zoom={13} style={{ height: '300px', marginBottom: '1rem' }}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             <LocationPicker onLocationSelect={setMarkerPos} />
             {markerPos && <Marker position={markerPos} />}
           </MapContainer>
 
-          <label>Upload Media (optional)</label>
-          <input type="file" name="media" accept="image/*,video/*" onChange={handleChange} />
+          {/* Coordinates Preview */}
+          {markerPos && (
+            <p style={{ fontSize: '0.95rem', marginBottom: '1rem', color: '#333' }}>
+              Selected Location: <strong>Lat:</strong> {markerPos.lat.toFixed(5)}, <strong>Lng:</strong> {markerPos.lng.toFixed(5)}
+            </p>
+          )}
+
+          <label>Upload Media</label>
+          <input type="file" name="media" accept="image/,video/" onChange={handleChange} />
 
           <button type="submit" className="report-btn" disabled={isSubmitting}>
             {isSubmitting ? 'Submitting...' : 'Submit Report'}

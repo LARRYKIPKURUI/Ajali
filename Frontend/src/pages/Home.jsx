@@ -2,25 +2,27 @@ import React from 'react';
 import './Home.css';
 import heroImage from '../assets/alerticon.png'; 
 import { useNavigate } from 'react-router-dom';
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth } from '../firebase'; 
 import About from './About';
 
 const Home = () => {
   const navigate = useNavigate();
 
-  const handleGoogleLogin = () => {
-    /* global google */
-    google.accounts.id.initialize({
-      client_id: "horizontal-oath-467019-h4",
-      callback: (response) => {
-        const credential = response.credential;
+  const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const token = await user.getIdToken();
 
-        // Optional: Send token to backend for verification
-        localStorage.setItem('google_token', credential);
-        navigate('/report');
-      },
-    });
+      localStorage.setItem('token', token);
+      localStorage.setItem('userName', user.displayName);
 
-    google.accounts.id.prompt(); // triggers the popup
+      navigate('/report');
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+    }
   };
 
   return (
