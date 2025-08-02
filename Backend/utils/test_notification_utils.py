@@ -28,5 +28,4 @@ def test_sms():
         return jsonify({'error': str(e)}), 500
 
 __all__ = ["test_email_bp", "test_sms_bp"]
-# This file contains test routes for sending email and SMS notifications.
-# It uses Flask blueprints to define routes for testing email and SMS functionalities.
+
