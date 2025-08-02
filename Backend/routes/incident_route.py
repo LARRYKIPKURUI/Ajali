@@ -53,7 +53,7 @@ def create_incident():
     is_critical = request.form.get("is_critical", "false").lower() == "true"
 
     # Reverse geocode
-    location_description = reverse_geocode(latitude, longitude)
+    location_name = reverse_geocode(latitude, longitude)
 
 
     # Create Incident
@@ -66,7 +66,7 @@ def create_incident():
         longitude=longitude,
         is_critical=is_critical,
         user_id=user.id,
-        location_description=location_description
+        location_name=location_name
     )
 
     db.session.add(incident)
@@ -95,14 +95,19 @@ def create_incident():
     notif_msg = f"""
     New Incident Reported 
     Title: {incident.title}
-    Location: {incident.location_description or f"{incident.latitude}, {incident.longitude}"}
-    Location: {incident.location_description or f"{incident.latitude}, {incident.longitude}"}
+    Location: {incident.location_name or f"{incident.latitude}, {incident.longitude}"}
     Reported By: {user.username}
     """
 
-    send_email("Ajali Alert: New Incident", notif_msg)
-    send_sms(notif_msg)
-    
+    send_email(
+    to="larrykipkurui12@gmail.com",  
+    subject="Ajali Alert: New Incident",
+    body=notif_msg
+            )
+
+
+    send_sms(phone_number="+254742009797", message=notif_msg)
+
 
     return jsonify({
         "message": "Incident reported successfully",
@@ -113,8 +118,7 @@ def create_incident():
             "description": incident.description,
             "latitude": incident.latitude,
             "longitude": incident.longitude,
-            "location_description": incident.location_description,
-            "location_description": incident.location_description,
+            "location_name": incident.location_name,
             "is_critical": incident.is_critical,
             "status": incident.status,
             "user_id": incident.user_id,
