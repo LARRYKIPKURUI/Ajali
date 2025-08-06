@@ -1,31 +1,31 @@
-import  { useState } from 'react';
+import { useState } from "react";
 // import { Navigate } from 'react-router-dom';
 // import { isLoggedIn, isAdmin } from '../utils/auth';
 
 const initialReports = [
   {
     id: 1,
-    type: 'Fire',
-    location: 'Nairobi CBD',
-    reporter: 'James James',
-    date: '2025-07-17',
-    status: 'Pending'
+    type: "Fire",
+    location: "Nairobi CBD",
+    reporter: "James James",
+    date: "2025-07-17",
+    status: "Pending",
   },
   {
     id: 2,
-    type: 'Accident',
-    location: 'Thika Road',
-    reporter: 'Hibby kuresh',
-    date: '2025-07-16',
-    status: 'Resolved'
+    type: "Accident",
+    location: "Thika Road",
+    reporter: "Hibby kuresh",
+    date: "2025-07-16",
+    status: "Resolved",
   },
   {
     id: 3,
-    type: 'Security Threat',
-    location: 'Westlands',
-    reporter: 'Nasra Gurxaan',
-    date: '2025-07-15',
-    status: 'In Progress'
+    type: "Security Threat",
+    location: "Westlands",
+    reporter: "Nasra Gurxaan",
+    date: "2025-07-15",
+    status: "In Progress",
   },
 ];
 
@@ -35,7 +35,9 @@ const AdminDashboard = () => {
   const [editReport, setEditReport] = useState(null);
 
   const handleDelete = (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this report!");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this report!"
+    );
     if (confirmDelete) {
       setReports(reports.filter((report) => report.id !== id));
     }
@@ -59,14 +61,14 @@ const AdminDashboard = () => {
 
   const getStatusBadgeClass = (status) => {
     switch (status) {
-      case 'Pending':
-        return 'badge bg-warning text-dark';
-      case 'Resolved':
-        return 'badge bg-success';
-      case 'In Progress':
-        return 'badge bg-info text-dark';
+      case "Pending":
+        return "badge bg-warning text-dark";
+      case "Resolved":
+        return "badge bg-success";
+      case "In Progress":
+        return "badge bg-info text-dark";
       default:
-        return 'badge bg-secondary';
+        return "badge bg-secondary";
     }
   };
 
@@ -75,7 +77,9 @@ const AdminDashboard = () => {
       <h2 className="text-center text-danger mb-4">Admin Dashboard</h2>
 
       <div className="mb-3 d-flex align-items-center gap-2">
-        <label htmlFor="status-filter" className="form-label m-0">Filter by Status:</label>
+        <label htmlFor="status-filter" className="form-label m-0">
+          Filter by Status:
+        </label>
         <select
           id="status-filter"
           className="form-select w-auto"
@@ -145,12 +149,21 @@ const AdminDashboard = () => {
 
       {/* Edit Modal */}
       {editReport && (
-        <div className="modal d-block" tabIndex="-1" role="dialog" style={{ background: "rgba(0,0,0,0.5)" }}>
+        <div
+          className="modal d-block"
+          tabIndex="-1"
+          role="dialog"
+          style={{ background: "rgba(0,0,0,0.5)" }}
+        >
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Edit Report #{editReport.id}</h5>
-                <button type="button" className="btn-close" onClick={() => setEditReport(null)}></button>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setEditReport(null)}
+                ></button>
               </div>
               <div className="modal-body">
                 <div className="mb-3">
@@ -194,7 +207,10 @@ const AdminDashboard = () => {
                 <button onClick={handleSave} className="btn btn-success">
                   Save
                 </button>
-                <button onClick={() => setEditReport(null)} className="btn btn-secondary">
+                <button
+                  onClick={() => setEditReport(null)}
+                  className="btn btn-secondary"
+                >
                   Cancel
                 </button>
               </div>

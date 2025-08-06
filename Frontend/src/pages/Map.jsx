@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-import './Map.css';
+import React, { useEffect, useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 
 // Fix Leaflet icon paths
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
 const Map = () => {
@@ -23,20 +22,19 @@ const Map = () => {
           setUserLocation([pos.coords.latitude, pos.coords.longitude]);
         },
         (err) => {
-          console.warn('User location not available:', err);
+          console.warn("User location not available:", err);
         }
       );
     }
 
-    // Fetch incidents from backend
+    // Fetch incidents
     const fetchIncidents = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/incidents');
+        const res = await fetch("http://localhost:5000/api/incidents");
         const data = await res.json();
-        // if the backend returns { incidents: [...] }
         setIncidents(data.incidents || data);
       } catch (err) {
-        console.error('Failed to fetch incidents:', err);
+        console.error("Failed to fetch incidents:", err);
       }
     };
 
@@ -44,72 +42,98 @@ const Map = () => {
   }, []);
 
   return (
-    <section className="live-map-section">
-      <h2 className="section-title">Live Incident Map</h2>
-      <p className="section-subtitle">
-        Track real-time incidents in your area and stay informed about local emergencies.
+    <section className="container py-5">
+      <h2 className="text-center fs-2 mb-1">Live Incident Map</h2>
+      <p className="text-center text-muted mb-4">
+        Track real-time incidents in your area and stay informed about local
+        emergencies.
       </p>
 
-      <div className="map-layout">
-        {/* LEFT: MAP */}
-        <div className="map-card">
-          <MapContainer
-            center={userLocation || [-1.286389, 36.817223]}
-            zoom={13}
-            style={{ height: '100%', borderRadius: '12px' }}
+      <div className="row g-4">
+        {/* LEFT: Map */}
+        <div className="col-lg-8">
+          <div
+            className="bg-light rounded shadow-sm"
+            style={{ minHeight: "400px", overflow: "hidden" }}
           >
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; OpenStreetMap contributors'
-            />
+            <MapContainer
+              center={userLocation || [-1.286389, 36.817223]}
+              zoom={13}
+              style={{ height: "100%", minHeight: "400px" }}
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution="&copy; OpenStreetMap contributors"
+              />
 
-            {userLocation && (
-              <Marker position={userLocation}>
-                <Popup>You are here</Popup>
-              </Marker>
-            )}
+              {userLocation && (
+                <Marker position={userLocation}>
+                  <Popup>You are here</Popup>
+                </Marker>
+              )}
 
-            {incidents.map((incident) => (
-              <Marker
-                key={incident.id}
-                position={[incident.latitude, incident.longitude]}
-              >
-                <Popup>
-                  <strong>{incident.title}</strong>
-                  <br />
-                  {incident.description}
-                  <br />
-                  <em>Reported: {new Date(incident.created_at).toLocaleString()}</em>
-                </Popup>
-              </Marker>
-            ))}
-          </MapContainer>
+              {incidents.map((incident) => (
+                <Marker
+                  key={incident.id}
+                  position={[incident.latitude, incident.longitude]}
+                >
+                  <Popup>
+                    <strong>{incident.title}</strong>
+                    <br />
+                    {incident.description}
+                    <br />
+                    <em>
+                      Reported: {new Date(incident.created_at).toLocaleString()}
+                    </em>
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
+          </div>
         </div>
 
-        {/* RIGHT: Recent Incidents */}
-        <div className="incident-list">
-          <h3>Recent Incidents</h3>
+        {/* RIGHT: Incident List */}
+        <div className="col-lg-4">
+          <h4 className="mb-3">Recent Incidents</h4>
           {incidents.length > 0 ? (
             incidents.map((incident) => (
-              <div className="incident-card" key={incident.id}>
-                <div className="incident-icon">🚨</div>
-                <div className="incident-info">
+              <div
+                className="d-flex align-items-center p-3 border rounded mb-3 bg-white shadow-sm"
+                key={incident.id}
+                style={{ transition: "transform 0.2s ease-in-out" }}
+              >
+                <div className="fs-3 me-3">🚨</div>
+                <div className="flex-grow-1">
                   <strong>{incident.title}</strong>
-                  <p>{incident.description}</p>
-                  <span className="incident-meta">
+                  <p className="mb-1 small text-muted">
+                    {incident.description}
+                  </p>
+                  <span className="text-secondary small">
                     {new Date(incident.created_at).toLocaleTimeString()}
                   </span>
                 </div>
-                <div className="incident-tags">
-                  <span className={`severity-badge ${incident.type?.toLowerCase()}`}>
+                <div className="text-end ms-3">
+                  <span
+                    className={`badge mb-1 ${
+                      incident.type?.toLowerCase() === "high"
+                        ? "bg-danger"
+                        : incident.type?.toLowerCase() === "medium"
+                        ? "bg-warning text-dark"
+                        : "bg-purple text-white"
+                    }`}
+                    style={{ fontSize: "0.75rem" }}
+                  >
                     {incident.type}
                   </span>
-                  <span className="reports">User ID: {incident.user_id}</span>
+                  <br />
+                  <span className="small text-muted">
+                    User ID: {incident.user_id}
+                  </span>
                 </div>
               </div>
             ))
           ) : (
-            <p>No incidents reported yet.</p>
+            <p className="text-muted">No incidents reported yet.</p>
           )}
         </div>
       </div>

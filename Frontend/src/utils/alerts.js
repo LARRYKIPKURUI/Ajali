@@ -5,7 +5,7 @@ export const showSuccess = (title, text) => {
     icon: 'success',
     title,
     text,
-    confirmButtonColor: '#d32f2f'
+    confirmButtonColor: '#10f51bff'
   });
 };
 
@@ -14,7 +14,7 @@ export const showError = (title, text) => {
     icon: 'error',
     title,
     text,
-    confirmButtonColor: '#d32f2f'
+    confirmButtonColor: '#eeff03ff'
   });
 };
 
