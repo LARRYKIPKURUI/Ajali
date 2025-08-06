@@ -1,102 +1,84 @@
-import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate, useLocation } from 'react-router-dom';
-import './Navbar.css';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import logo from '../assets/alerticon.png';
 
-const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userInitial, setUserInitial] = useState(null);
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userName = localStorage.getItem('userName');
-    setIsLoggedIn(!!token);
-
-    if (userName) {
-      setUserInitial(userName.charAt(0).toUpperCase());
-    }
-  }, [location]);
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userName');
-    setIsLoggedIn(false);
-    navigate('/');
-  };
+const Navbar = ({ user, onLogout }) => {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="navbar">
-      <div className="navbar-container">
-        <div className="navbar-logo">
-          <img src={logo} alt="Ajali Logo" />
-          <span>Ajali!</span>
-        </div>
+    <nav className="navbar navbar-expand-md navbar-light bg-light border-bottom shadow-sm sticky-top">
+      <div className="container">
+        {/* Brand */}
+        <Link to="/" className="navbar-brand d-flex align-items-center text-danger fw-bold">
+          <img src={logo} alt="Logo" height="32" width="32" className="me-2" />
+          Ajali!
+        </Link>
 
-        <div className="navbar-links">
-          <div className="center-links">
-            <NavLink to="/" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`}>Home</NavLink>
-            <NavLink to="/about" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`}>About</NavLink>
+        {/* Toggler */}
+        <button
+          className="navbar-toggler"
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-controls="navbarNav"
+          aria-expanded={isOpen}
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
-            {isLoggedIn && (
+        {/* Links */}
+        <div className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`} id="navbarNav">
+          <ul className="navbar-nav mx-auto">
+            <li className="nav-item">
+              <Link to="/report" className="nav-link text-danger fw-medium">
+                Report Incident
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/alerts" className="nav-link text-danger fw-medium">
+                Alerts
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/about" className="nav-link text-danger fw-medium">
+                About
+              </Link>
+            </li>
+          </ul>
+
+          {/* Right Auth Section */}
+          <ul className="navbar-nav ms-auto">
+            {user ? (
               <>
-                <NavLink to="/report" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`}>Report</NavLink>
-                <NavLink to="/map" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`}>Map</NavLink>
-                <NavLink to="/profile" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`}>Profile</NavLink>
-              </>
-            )}
-          </div>
-
-          <div className="auth-links">
-            {isLoggedIn ? (
-              <>
-                <div className="user-circle">{userInitial}</div>
-                <button onClick={handleLogout} className="logout-btn">Logout</button>
+                <li className="nav-item me-2">
+                  <span className="btn btn-danger rounded-circle fw-bold text-white" style={{ width: '32px', height: '32px' }}>
+                    {user.username.charAt(0).toUpperCase()}
+                  </span>
+                </li>
+                <li className="nav-item">
+                  <button onClick={onLogout} className="btn btn-outline-danger btn-sm">
+                    Logout
+                  </button>
+                </li>
               </>
             ) : (
               <>
-                <NavLink to="/login" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`}>Login</NavLink>
-                <NavLink to="/signup" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`}>Signup</NavLink>
+                <li className="nav-item me-2">
+                  <Link to="/login" className="btn btn-outline-danger btn-sm">
+                    Login
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/signup" className="btn btn-danger btn-sm text-white">
+                    Sign Up
+                  </Link>
+                </li>
               </>
             )}
-          </div>
+          </ul>
         </div>
-
-        <button
-          className={`navbar-toggle ${isMenuOpen ? 'open' : ''}`}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          <span className="bar"></span>
-          <span className="bar"></span>
-          <span className="bar"></span>
-        </button>
       </div>
-
-      {isMenuOpen && (
-        <div className="navbar-mobile">
-          <NavLink to="/" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Home</NavLink>
-          <NavLink to="/about" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>About</NavLink>
-
-          {isLoggedIn && (
-            <>
-              <NavLink to="/report" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Report</NavLink>
-              <NavLink to="/map" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Map</NavLink>
-              <NavLink to="/profile" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Profile</NavLink>
-              <button onClick={() => { handleLogout(); setIsMenuOpen(false); }} className="logout-btn">Logout</button>
-            </>
-          )}
-
-          {!isLoggedIn && (
-            <>
-              <NavLink to="/login" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Login</NavLink>
-              <NavLink to="/signup" className={({ isActive }) => `logout-btn ${isActive ? 'active' : ''}`} onClick={() => setIsMenuOpen(false)}>Signup</NavLink>
-            </>
-          )}
-        </div>
-      )}
-    </header>
+    </nav>
   );
 };
 

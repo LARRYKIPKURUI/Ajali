@@ -1,9 +1,13 @@
-import React from 'react'
-import {Navigate} from 'react-router-dom'
-import { isLoggedIn } from '../utils/auth';
+import { Navigate } from "react-router-dom";
 
-const PrivateRoute = ({children}) => {
-  return isLoggedIn() ? children : <Navigate to = "/login" replace />; 
-};
+function PrivateRoute({ children }) {
+  const token = localStorage.getItem("token");
 
-export default PrivateRoute
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
+}
+
+export default PrivateRoute;
