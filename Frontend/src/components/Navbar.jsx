@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/alerticon.png";
 
@@ -36,13 +36,8 @@ const Navbar = ({ user, onLogout }) => {
         >
           <ul className="navbar-nav mx-auto">
             <li className="nav-item">
-              <Link to="/report" className="nav-link text-danger fw-medium">
-                Report Incident
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/alerts" className="nav-link text-danger fw-medium">
-                Alerts
+              <Link to="/" className="nav-link text-danger fw-medium">
+                Home 
               </Link>
             </li>
             <li className="nav-item">
@@ -50,6 +45,17 @@ const Navbar = ({ user, onLogout }) => {
                 About
               </Link>
             </li>
+            <li className="nav-item">
+              <Link to="/report" className="nav-link text-danger fw-medium">
+                Report 
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/map" className="nav-link text-danger fw-medium">
+                Map
+              </Link>
+            </li>
+            
           </ul>
 
           {/* Right Auth Section */}

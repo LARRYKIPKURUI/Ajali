@@ -1,68 +1,83 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faStopwatch,
   faUsers,
-  faBookOpen,
   faShieldAlt,
+  faHeart,
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 
 const About = () => {
   return (
-    <section className="py-5 bg-light" id="about-section">
+    <section className="py-5 bg-white" id="about-section">
       <div className="container">
+        {/* Heading and Mission */}
+        <div className="text-center mb-5">
+          <h2 className="fw-bold">How Ajali! Helps Save Lives</h2>
+          <p className="text-muted fs-6 mx-auto" style={{ maxWidth: "600px" }}>
+            Our mission is to create a safer Kenya by enabling rapid emergency
+            response and community-driven incident reporting.
+          </p>
+        </div>
+
         <div className="row g-4 align-items-start">
-          {/* Bullet Points */}
+          {/* Left Side: Feature Bullets */}
           <div className="col-md-6 d-flex flex-column gap-4">
-            <div className="d-flex flex-column">
+            <div className="d-flex gap-3">
+              <FontAwesomeIcon
+                icon={faStopwatch}
+                className="text-danger fs-3 mt-1"
+              />
+              <div>
+                <h5 className="fw-semibold mb-1">Instant Reporting</h5>
+                <p className="text-muted mb-0 small">
+                  Report accidents and emergencies with just a few taps. Our
+                  streamlined interface ensures help is notified immediately.
+                </p>
+              </div>
+            </div>
+
+            <div className="d-flex gap-3">
               <FontAwesomeIcon
                 icon={faUsers}
-                className="text-danger fs-2 mb-2"
+                className="text-danger fs-3 mt-1"
               />
-              <h3 className="fs-5 fw-semibold text-dark mb-1">
-                Empowering Communities
-              </h3>
-              <p className="text-muted small mb-0">
-                We bring people together to respond and recover faster in
-                emergencies.
-              </p>
+              <div>
+                <h5 className="fw-semibold mb-1">Community Network</h5>
+                <p className="text-muted mb-0 small">
+                  Connect with nearby users and first responders. Build a
+                  network of people who care about community safety.
+                </p>
+              </div>
             </div>
 
-            <div className="d-flex flex-column">
-              <FontAwesomeIcon
-                icon={faBookOpen}
-                className="text-danger fs-2 mb-2"
-              />
-              <h3 className="fs-5 fw-semibold text-dark mb-1">
-                Educating for Impact
-              </h3>
-              <p className="text-muted small mb-0">
-                Knowledge saves lives. We train, inform and engage with clarity.
-              </p>
-            </div>
-
-            <div className="d-flex flex-column">
+            <div className="d-flex gap-3">
               <FontAwesomeIcon
                 icon={faShieldAlt}
-                className="text-danger fs-2 mb-2"
+                className="text-danger fs-3 mt-1"
               />
-              <h3 className="fs-5 fw-semibold text-dark mb-1">
-                Ensuring Safety
-              </h3>
-              <p className="text-muted small mb-0">
-                From alerts to response, we prioritize safety and reliability.
-              </p>
+              <div>
+                <h5 className="fw-semibold mb-1">Verified Information</h5>
+                <p className="text-muted mb-0 small">
+                  All incidents are verified and tracked to ensure accurate
+                  information reaches the right authorities.
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Making a Difference */}
+          {/* Right Side: Making a Difference */}
           <div className="col-md-6">
-            <h2 className="fs-4 fw-bold  mb-3">Making a Difference</h2>
-            <p className="text-secondary lh-base">
-              Every report matters. Every second counts. Through technology and
-              community, we’re bridging gaps in emergency response and saving
-              lives together. This is more than an app it’s a movement for
-              impact.
-            </p>
+            <div
+              className="bg-danger bg-opacity-10 p-4 rounded text-center h-100 d-flex flex-column justify-content-center"
+            >
+              <FontAwesomeIcon icon={faHeart} className="text-danger fs-2 mb-3" />
+              <h5 className="fw-bold mb-2">Making a Difference</h5>
+              <p className="text-muted small mb-0">
+                Every report helps build a safer community. Join thousands of
+                Kenyans who are already making a difference.
+              </p>
+            </div>
           </div>
         </div>
 
