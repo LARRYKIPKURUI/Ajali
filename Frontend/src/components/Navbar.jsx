@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import logo from '../assets/alerticon.png';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import logo from "../assets/alerticon.png";
 
 const Navbar = ({ user, onLogout }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,7 +9,10 @@ const Navbar = ({ user, onLogout }) => {
     <nav className="navbar navbar-expand-md navbar-light bg-light border-bottom shadow-sm sticky-top">
       <div className="container">
         {/* Brand */}
-        <Link to="/" className="navbar-brand d-flex align-items-center text-danger fw-bold">
+        <Link
+          to="/"
+          className="navbar-brand d-flex align-items-center text-danger fw-bold"
+        >
           <img src={logo} alt="Logo" height="32" width="32" className="me-2" />
           Ajali!
         </Link>
@@ -27,7 +30,10 @@ const Navbar = ({ user, onLogout }) => {
         </button>
 
         {/* Links */}
-        <div className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`} id="navbarNav">
+        <div
+          className={`collapse navbar-collapse ${isOpen ? "show" : ""}`}
+          id="navbarNav"
+        >
           <ul className="navbar-nav mx-auto">
             <li className="nav-item">
               <Link to="/report" className="nav-link text-danger fw-medium">
@@ -51,12 +57,18 @@ const Navbar = ({ user, onLogout }) => {
             {user ? (
               <>
                 <li className="nav-item me-2">
-                  <span className="btn btn-danger rounded-circle fw-bold text-white" style={{ width: '32px', height: '32px' }}>
+                  <span
+                    className="btn btn-danger rounded-circle fw-bold text-white"
+                    style={{ width: "32px", height: "32px" }}
+                  >
                     {user.username.charAt(0).toUpperCase()}
                   </span>
                 </li>
                 <li className="nav-item">
-                  <button onClick={onLogout} className="btn btn-outline-danger btn-sm">
+                  <button
+                    onClick={onLogout}
+                    className="btn btn-outline-danger btn-sm"
+                  >
                     Logout
                   </button>
                 </li>
@@ -69,7 +81,10 @@ const Navbar = ({ user, onLogout }) => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/signup" className="btn btn-danger btn-sm text-white">
+                  <Link
+                    to="/signup"
+                    className="btn btn-danger btn-sm text-white"
+                  >
                     Sign Up
                   </Link>
                 </li>
