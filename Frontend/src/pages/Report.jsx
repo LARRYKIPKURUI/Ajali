@@ -120,104 +120,116 @@ const Report = () => {
 
   return (
     <section className="container py-5">
-      <div className="card shadow p-4 mx-auto" style={{ maxWidth: "600px" }}>
-        <h2 className="text-center text-danger mb-4">Report an Incident</h2>
+      <div className="card shadow p-4 mx-auto" style={{ maxWidth: "1000px" }}>
+        <h2 className="text-center text-danger fw-semibold mb-4">Report an Incident</h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">Category</label>
-            <select
-              name="category"
-              className="form-select"
-              value={formData.category}
-              onChange={handleChange}
-              required
-            >
-              <option value="">-- Select --</option>
-              <option value="accident">Accident</option>
-              <option value="fire">Fire</option>
-              <option value="medical">Medical Emergency</option>
-              <option value="security">Security Threat</option>
-            </select>
-          </div>
+          <div className="row g-4">
+            {/* Left Column */}
+            <div className="col-md-6">
+              <div className="mb-3">
+                <label className="form-label">Category</label>
+                <select
+                  name="category"
+                  className="form-select"
+                  value={formData.category}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">-- Select --</option>
+                  <option value="accident">Accident</option>
+                  <option value="fire">Fire</option>
+                  <option value="medical">Medical Emergency</option>
+                  <option value="security">Security Threat</option>
+                </select>
+              </div>
 
-          <div className="mb-3">
-            <label className="form-label">Title</label>
-            <input
-              type="text"
-              name="title"
-              className="form-control"
-              placeholder="Short title for the incident"
-              value={formData.title}
-              onChange={handleChange}
-              required
-            />
-          </div>
+              <div className="mb-3">
+                <label className="form-label">Title</label>
+                <input
+                  type="text"
+                  name="title"
+                  className="form-control"
+                  placeholder="Short title for the incident"
+                  value={formData.title}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-          <div className="mb-3">
-            <label className="form-label">Description</label>
-            <textarea
-              name="description"
-              rows="4"
-              className="form-control"
-              placeholder="Describe what happened..."
-              value={formData.description}
-              onChange={handleChange}
-              required
-            />
-          </div>
+              <div className="mb-3">
+                <label className="form-label">Upload Media</label>
+                <input
+                  type="file"
+                  name="media"
+                  className="form-control"
+                  accept="image/*,video/*"
+                  onChange={handleChange}
+                />
+              </div>
 
-          <div className="form-check mb-3">
-            <input
-              type="checkbox"
-              name="is_critical"
-              className="form-check-input"
-              checked={formData.is_critical}
-              onChange={handleChange}
-              id="criticalCheck"
-            />
-            <label className="form-check-label" htmlFor="criticalCheck">
-              Mark as Urgent/Critical
-            </label>
-          </div>
+              <div className="form-check mb-3">
+                <input
+                  type="checkbox"
+                  name="is_critical"
+                  className="form-check-input"
+                  checked={formData.is_critical}
+                  onChange={handleChange}
+                  id="criticalCheck"
+                />
+                <label className="form-check-label" htmlFor="criticalCheck">
+                  Mark as Urgent/Critical
+                </label>
+              </div>
+            </div>
 
-          <div className="mb-3">
-            <label className="form-label">Location</label>
-            <MapContainer
-              center={mapCenter}
-              zoom={13}
-              style={{ height: "300px", marginBottom: "1rem" }}
-            >
-              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              <LocationPicker onLocationSelect={setMarkerPos} />
-              {markerPos && <Marker position={markerPos} />}
-            </MapContainer>
-            {markerPos && (
-              <p className="text-muted small">
-                Selected Location: <strong>Lat:</strong>{" "}
-                {markerPos.lat.toFixed(5)}, <strong>Lng:</strong>{" "}
-                {markerPos.lng.toFixed(5)}
-              </p>
-            )}
-          </div>
+            {/* Right Column */}
+            <div className="col-md-6">
+              <div className="mb-3">
+                <label className="form-label">Description</label>
+                <textarea
+                  name="description"
+                  rows="6"
+                  className="form-control"
+                  placeholder="Describe what happened..."
+                  value={formData.description}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
 
-          <div className="mb-3">
-            <label className="form-label">Upload Media</label>
-            <input
-              type="file"
-              name="media"
-              className="form-control"
-              accept="image/*,video/*"
-              onChange={handleChange}
-            />
-          </div>
+            {/* Map Full Width */}
+            <div className="col-12">
+              <label className="form-label">Location</label>
+              <MapContainer
+                center={mapCenter}
+                zoom={13}
+                style={{ height: "300px", marginBottom: "1rem" }}
+              >
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                <LocationPicker onLocationSelect={setMarkerPos} />
+                {markerPos && <Marker position={markerPos} />}
+              </MapContainer>
+              {markerPos && (
+                <p className="text-muted small">
+                  Selected Location: <strong>Lat:</strong>{" "}
+                  {markerPos.lat.toFixed(5)}, <strong>Lng:</strong>{" "}
+                  {markerPos.lng.toFixed(5)}
+                </p>
+              )}
+            </div>
 
-          <button
-            type="submit"
-            className="btn btn-danger w-100"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Submitting..." : "Submit Report"}
-          </button>
+            {/* Submit Button */}
+            <div className="col-12">
+              <button
+                type="submit"
+                className="btn btn-danger text-center fw-bolder w-100 fs-5"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Submitting..." : "Submit Report"}
+              </button>
+            </div>
+          </div>
         </form>
       </div>
     </section>

@@ -1,9 +1,15 @@
-import  { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/alerticon.png";
 
 const Navbar = ({ user, onLogout }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  const getLinkClass = (path) => {
+    const isActive = location.pathname === path;
+    return `nav-link fw-semibold mx-2 ${isActive ? "text-danger isActive" : "text-secondary"}`;
+  };
 
   return (
     <nav className="navbar navbar-expand-md navbar-light bg-light border-bottom shadow-sm sticky-top">
@@ -13,8 +19,8 @@ const Navbar = ({ user, onLogout }) => {
           to="/"
           className="navbar-brand d-flex align-items-center text-danger fw-bold"
         >
-          <img src={logo} alt="Logo" height="32" width="32" className="me-2" />
-          Ajali!
+          <img src={logo} alt="Logo" height="45" width="45" className="me-2 fs-5" />
+          <span className="fs-4 fw-bolder">Ajali!</span>
         </Link>
 
         {/* Toggler */}
@@ -35,27 +41,26 @@ const Navbar = ({ user, onLogout }) => {
           id="navbarNav"
         >
           <ul className="navbar-nav mx-auto">
-            <li className="nav-item">
-              <Link to="/" className="nav-link text-danger fw-medium">
-                Home 
+            <li className="nav-item fs-5">
+              <Link to="/" className={getLinkClass("/")}>
+                Home
               </Link>
             </li>
-            <li className="nav-item">
-              <Link to="/about" className="nav-link text-danger fw-medium">
+            <li className="nav-item fs-5">
+              <Link to="/about" className={getLinkClass("/about")}>
                 About
               </Link>
             </li>
-            <li className="nav-item">
-              <Link to="/report" className="nav-link text-danger fw-medium">
-                Report 
+            <li className="nav-item fs-5">
+              <Link to="/report" className={getLinkClass("/report")}>
+                Report
               </Link>
             </li>
-            <li className="nav-item">
-              <Link to="/map" className="nav-link text-danger fw-medium">
+            <li className="nav-item fs-5">
+              <Link to="/map" className={getLinkClass("/map")}>
                 Map
               </Link>
             </li>
-            
           </ul>
 
           {/* Right Auth Section */}
@@ -87,10 +92,7 @@ const Navbar = ({ user, onLogout }) => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link
-                    to="/signup"
-                    className="btn btn-danger btn-sm text-white"
-                  >
+                  <Link to="/signup" className="btn btn-danger btn-sm text-white">
                     Sign Up
                   </Link>
                 </li>

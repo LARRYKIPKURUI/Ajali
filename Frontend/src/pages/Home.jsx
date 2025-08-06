@@ -51,7 +51,7 @@ const Home = () => {
         </h5>
 
         {/* Paragraph */}
-        <p className="text-semibold mb-4 mx-auto" style={{ maxWidth: "500px" }}>
+        <p className="text-semibold fs-6 mb-4 mx-auto" style={{ maxWidth: "500px" }}>
           Report accidents and emergencies instantly. Help save lives in your
           community with real-time incident reporting and emergency response coordination.
         </p>
