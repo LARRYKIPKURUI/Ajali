@@ -23,57 +23,63 @@ const Home = () => {
   };
 
   const handleEmergencyCall = () => {
-    window.location.href = "tel:999"; // Update if needed
+    window.location.href = "tel:999";
   };
 
   return (
-    <section
-      className="d-flex align-items-center justify-content-center min-vh-100 text-center"
-      style={{ backgroundColor: "#ffeaea" }}
-    >
-      <div className="px-3">
-        {/* Alert Icon */}
-        <img
-          src={heroImage}
-          alt="Alert Icon"
-          className="mb-4"
-          style={{ width: "80px", height: "80px" }}
-        />
+    <div style={{ backgroundColor: "#ffeaea" }}>
+      <section className="d-flex align-items-center justify-content-center py-5 text-center">
+        <div className="px-3">
+          {/* Alert Icon */}
+          <img
+            src={heroImage}
+            alt="Alert Icon"
+            className="mb-4"
+            style={{ width: "80px", height: "80px" }}
+          />
 
-        {/* Title */}
-        <h1 className="fw-bold text-danger" style={{ fontSize: "3rem" }}>
-          Ajali!
-        </h1>
+          {/* Title */}
+          <h1 className="fw-bold text-danger" style={{ fontSize: "3rem" }}>
+            Ajali!
+          </h1>
 
-        {/* Subtitle */}
-        <h5 className="fw-bolder text-dark mb-3" style={{ fontSize: "1.25rem" }}>
-          Every Second Counts
-        </h5>
-
-        {/* Paragraph */}
-        <p className="text-semibold fs-6 mb-4 mx-auto" style={{ maxWidth: "500px" }}>
-          Report accidents and emergencies instantly. Help save lives in your
-          community with real-time incident reporting and emergency response coordination.
-        </p>
-
-        {/* Buttons */}
-        <div className="d-flex justify-content-center gap-3 flex-wrap">
-          <button
-            className="btn btn-danger px-4 py-2 fw-semibold rounded-pill"
-            onClick={handleGoogleLogin}
+          {/* Subtitle */}
+          <h5
+            className="fw-bolder text-dark mb-3"
+            style={{ fontSize: "1.25rem" }}
           >
-            Report Incident
-          </button>
+            Every Second Counts
+          </h5>
 
-          <button
-            className="btn text-danger bg-white px-4 py-2 fw-bold rounded-pill"
-            onClick={handleEmergencyCall}
+          {/* Paragraph */}
+          <p
+            className="text-semibold fs-6 mb-4 mx-auto"
+            style={{ maxWidth: "500px" }}
           >
-            Emergency Call
-          </button>
+            Report accidents and emergencies instantly. Help save lives in your
+            community with real-time incident reporting and emergency response
+            coordination.
+          </p>
+
+          {/* Buttons */}
+          <div className="d-flex justify-content-center gap-3 flex-wrap">
+            <button
+              className="btn btn-danger px-4 py-2 fw-semibold rounded-pill"
+              onClick={handleGoogleLogin}
+            >
+              Report Incident
+            </button>
+
+            <button
+              className="btn text-danger bg-white px-4 py-2 fw-bold rounded-pill"
+              onClick={handleEmergencyCall}
+            >
+              Emergency Call
+            </button>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 };
 

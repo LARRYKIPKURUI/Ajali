@@ -8,7 +8,9 @@ const Navbar = ({ user, onLogout }) => {
 
   const getLinkClass = (path) => {
     const isActive = location.pathname === path;
-    return `nav-link fw-semibold mx-2 ${isActive ? "text-danger isActive" : "text-secondary"}`;
+    return `nav-link fw-semibold mx-2 ${
+      isActive ? "text-danger isActive" : "text-secondary"
+    }`;
   };
 
   return (
@@ -19,7 +21,13 @@ const Navbar = ({ user, onLogout }) => {
           to="/"
           className="navbar-brand d-flex align-items-center text-danger fw-bold"
         >
-          <img src={logo} alt="Logo" height="45" width="45" className="me-2 fs-5" />
+          <img
+            src={logo}
+            alt="Logo"
+            height="45"
+            width="45"
+            className="me-2 fs-5"
+          />
           <span className="fs-4 fw-bolder">Ajali!</span>
         </Link>
 
@@ -78,25 +86,21 @@ const Navbar = ({ user, onLogout }) => {
                 <li className="nav-item">
                   <button
                     onClick={onLogout}
-                    className="btn btn-outline-danger btn-sm"
+                    className="btn btn-danger text-white fw-semibold"
                   >
-                    Logout
+                    Log Out
                   </button>
                 </li>
               </>
             ) : (
-              <>
-                <li className="nav-item me-2">
-                  <Link to="/login" className="btn btn-outline-danger btn-sm">
-                    Login
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="/signup" className="btn btn-danger btn-sm text-white">
-                    Sign Up
-                  </Link>
-                </li>
-              </>
+              <li className="nav-item">
+                <Link
+                  to="/login"
+                  className="btn btn-danger text-white fw-semibold"
+                >
+                  Sign In / Sign Up
+                </Link>
+              </li>
             )}
           </ul>
         </div>

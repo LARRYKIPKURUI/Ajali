@@ -100,11 +100,11 @@ const Footer = () => {
         <hr className="border-secondary my-4" />
         <div className="text-center small text">
           &copy; {new Date().getFullYear()} Ajali! All rights reserved. Built for the safety of Kenyan communities.
-          <div className="mt-1">
+          {/* <div className="mt-1">
             <span className="me-3">Privacy Policy</span>
             <span className="me-3">Terms of Service</span>
             <span>Support</span>
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>

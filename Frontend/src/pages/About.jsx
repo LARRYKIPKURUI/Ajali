@@ -14,7 +14,7 @@ const About = () => {
         {/* Heading and Mission */}
         <div className="text-center mb-5">
           <h2 className="fw-bold">How Ajali! Helps Save Lives</h2>
-          <p className="text-muted fs-6 mx-auto" style={{ maxWidth: "600px" }}>
+          <p className="text-muted fs-6 mx-auto my-" style={{ maxWidth: "600px" }}>
             Our mission is to create a safer Kenya by enabling rapid emergency
             response and community-driven incident reporting.
           </p>
