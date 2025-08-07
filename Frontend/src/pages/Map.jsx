@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { useLocation } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
@@ -46,13 +46,26 @@ const Map = () => {
 
     // Fetch incidents from the new /today endpoint
     const fetchTodaysIncidents = async () => {
+      // --- IMPORTANT: Get the token and add it to the headers ---
+      const token = localStorage.getItem("token");
+      if (!token) {
+        showError("Authentication Error", "You must be logged in to view incidents.");
+        return;
+      }
+      
       try {
-        const res = await fetch("http://localhost:5000/api/incidents/today");
+        const res = await fetch("http://localhost:5000/api/incidents/today", {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        });
+        
         if (res.ok) {
           const data = await res.json();
           setIncidents(data.incidents || []);
         } else {
-          showError("Map Error", "Failed to fetch incidents.");
+          const errorData = await res.json();
+          showError("Map Error", errorData.error || "Failed to fetch incidents.");
         }
       } catch (err) {
         console.error("Failed to fetch incidents:", err);

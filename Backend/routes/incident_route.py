@@ -1,4 +1,3 @@
-import os
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from extensions import db
@@ -8,7 +7,7 @@ from utils.notification_utils import send_sms, send_email
 from utils.geolocation_utils import reverse_geocode
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderServiceError
-
+from datetime import date
 
 incident_bp = Blueprint("incidents", __name__)
 
@@ -21,10 +20,12 @@ def reverse_geocode(lat, lon):
     except (GeocoderTimedOut, GeocoderServiceError):
         return None
 
+#Incident Routes
 
 @incident_bp.route("", methods=["POST"])
 @jwt_required()
 def create_incident():
+    """Handles the creation of a new incident."""
     identity = get_jwt_identity()
     user = User.query.get(identity["id"])
 
@@ -55,10 +56,8 @@ def create_incident():
     # Reverse geocode
     location_name = reverse_geocode(latitude, longitude)
 
-
     # Create Incident
     incident = Incident(
-        
         type=incident_type,
         title=title,
         description=description,
@@ -70,10 +69,9 @@ def create_incident():
     )
 
     db.session.add(incident)
-    db.session.flush()  # Access incident.id before committing
+    db.session.flush()
 
     # Upload media to Cloudinary
-    
     upload_result = upload_file(file)
     if not upload_result:
         db.session.rollback()
@@ -91,23 +89,14 @@ def create_incident():
     db.session.commit()
 
     # Notification content
-    
     notif_msg = f"""
     New Incident Reported 
     Title: {incident.title}
     Location: {incident.location_name or f"{incident.latitude}, {incident.longitude}"}
     Reported By: {user.username}
     """
-
-    send_email(
-    to="larrykipkurui12@gmail.com",  
-    subject="Ajali Alert: New Incident",
-    body=notif_msg
-            )
-
-
+    send_email(to="larrykipkurui12@gmail.com", subject="Ajali Alert: New Incident", body=notif_msg)
     send_sms(phone_number="+254742009797", message=notif_msg)
-
 
     return jsonify({
         "message": "Incident reported successfully",
@@ -121,8 +110,46 @@ def create_incident():
             "location_name": incident.location_name,
             "is_critical": incident.is_critical,
             "status": incident.status,
-            "user_id": incident.user_id,
+            "user_id": incident.user.id, # Ensure you get the user id
             "created_at": incident.created_at.isoformat()
         },
         "media": media.to_dict()
     }), 201
+
+@incident_bp.route("/today", methods=["GET"])
+@jwt_required()
+def get_todays_incidents():
+    """
+    Returns a list of all incidents reported today.
+    Requires a valid JWT for authentication.
+    """
+    try:
+        today = date.today()
+        incidents_today = Incident.query.filter(
+            db.func.date(Incident.created_at) == today
+        ).all()
+
+        incidents_list = []
+        for incident in incidents_today:
+            
+            media = Media.query.filter_by(incident_id=incident.id).first()
+            media_url = media.url if media else None
+
+            incidents_list.append({
+                "id": incident.id,
+                "type": incident.type,
+                "title": incident.title,
+                "description": incident.description,
+                "latitude": incident.latitude,
+                "longitude": incident.longitude,
+                "created_at": incident.created_at.isoformat(),
+                "user_id": incident.user_id,
+                "is_critical": incident.is_critical,
+                "media_url": media_url, 
+            })
+
+        return jsonify({"incidents": incidents_list}), 200
+    except Exception as e:
+        # log the exception for debugging
+        print(f"An error occurred: {e}")
+        return jsonify({"error": "An internal server error occurred"}), 500
