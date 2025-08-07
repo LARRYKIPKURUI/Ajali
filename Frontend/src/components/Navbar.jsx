@@ -69,10 +69,16 @@ const Navbar = ({ user, onLogout }) => {
                 Map
               </Link>
             </li>
+            <li className="nav-item fs-5">
+              <Link to="/profile" className={getLinkClass("/profile")}>
+                Profile
+              </Link>
+            </li>
           </ul>
 
           {/* Right Auth Section */}
           <ul className="navbar-nav ms-auto">
+            {/* Conditional rendering based on the user prop */}
             {user ? (
               <>
                 <li className="nav-item me-2">
@@ -80,6 +86,7 @@ const Navbar = ({ user, onLogout }) => {
                     className="btn btn-danger rounded-circle fw-bold text-white"
                     style={{ width: "32px", height: "32px" }}
                   >
+                    {/* Display the first letter of the username */}
                     {user.username.charAt(0).toUpperCase()}
                   </span>
                 </li>

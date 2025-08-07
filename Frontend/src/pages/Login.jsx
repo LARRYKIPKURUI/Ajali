@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/alerticon.png";
 import { jwtDecode } from "jwt-decode";
+import { showSuccess, showError } from "../utils/alerts"; 
 
 const Login = () => {
   const navigate = useNavigate();
@@ -32,15 +33,18 @@ const Login = () => {
 
         localStorage.setItem("isAdmin", isAdmin);
 
-        alert("Login successful!");
+        
+        showSuccess("Login successful!", "You have been logged in.");
         navigate(isAdmin ? "/admin" : "/profile");
       } else {
         const error = await response.json();
-        alert(`Login failed: ${error.error || "Please try again."}`);
+        
+        showError("Login failed", error.error || "Please try again.");
       }
     } catch (error) {
       console.error("Login error:", error);
-      alert("Server error. Please try again later.");
+      
+      showError("Server error", "Please try again later.");
     }
   };
 

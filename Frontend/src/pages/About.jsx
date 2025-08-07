@@ -69,7 +69,7 @@ const About = () => {
           </div>
 
           {/* Right Side: Making a Difference */}
-          <div className="col-md-6">
+          <div className="col-md-6 ">
             <div
               className="bg-danger bg-opacity-10 p-4 rounded text-center h-100 d-flex flex-column justify-content-center"
             >

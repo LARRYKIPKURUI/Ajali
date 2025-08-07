@@ -2,8 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/alerticon.png";
 import { jwtDecode } from "jwt-decode";
-// import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-// import { auth } from "../firebase";
 import { showSuccess, showError } from "../utils/alerts";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 
@@ -28,24 +26,7 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // const handleGoogleSignup = async () => {
-  //   const provider = new GoogleAuthProvider();
-  //   try {
-  //     const result = await signInWithPopup(auth, provider);
-  //     const user = result.user;
-  //     const token = await user.getIdToken();
-
-  //     localStorage.setItem("token", token);
-  //     localStorage.setItem("userName", user.displayName);
-
-  //     showSuccess("Signup Successful!", "Redirecting to report...");
-  //     navigate("/report");
-  //   } catch (error) {
-  //     console.error("Google Sign-Up Error:", error);
-  //     showError("Google Sign-Up Failed", error.message);
-  //   }
-  // };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 

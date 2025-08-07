@@ -1,57 +1,37 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import Report from "./pages/Report";
-import Map from "./pages/Map";
-import Profile from "./pages/Profile";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import Footer from "./components/Footer";
-import AdminDashboard from "./pages/AdminDashboard";
-import PrivateRoute from "./components/PrivateRoute";
-import AdminRoute from "./components/AdminRoute";
-import About from "./pages/About";
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import AppRoutes from './routes';
 
-const App = () => {
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    navigate("/login");
+  };
+
   return (
-    <Router>
-      <div className="d-flex flex-column min-vh-100">
-        <Navbar />
-        
-        {/* Main content */}
-        <main className="flex-grow-1">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/report" element={<Report />} />
-            <Route path="/map" element={<Map />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/signup" element={<Signup />} />
+    <div className="d-flex flex-column min-vh-100">
+      <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+      
+      {/* Main content */}
+      <main className="flex-grow-1">
+        <AppRoutes setIsLoggedIn={setIsLoggedIn} />
+      </main>
 
-            <Route
-              path="/profile"
-              element={
-                <PrivateRoute>
-                  <Profile />
-                </PrivateRoute>
-              }
-            />
-
-            <Route
-              path="/admin"
-              element={
-                <AdminRoute>
-                  <AdminDashboard />
-                </AdminRoute>
-              }
-            />
-          </Routes>
-        </main>
-
-        <Footer />
-      </div>
-    </Router>
+      <Footer />
+    </div>
   );
-};
+}
 
 export default App;

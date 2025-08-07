@@ -1,21 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { auth } from "../firebase";
+import { useState, useEffect } from "react";
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const firebaseUser = auth.currentUser;
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       const token = localStorage.getItem("token");
+      if (!token) return; // Exit if no token is found
+
       try {
         const res = await fetch("http://localhost:5000/api/users/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
+
         if (res.ok) {
           const data = await res.json();
           setUserData(data);
+        } else {
+          console.error("Failed to fetch profile data:", res.statusText);
         }
       } catch (err) {
         console.error("Error fetching profile data:", err);
@@ -28,6 +31,8 @@ const Profile = () => {
   const handleSave = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
+    if (!token) return;
+
     const updatedInfo = {
       phone_number: e.target.phone_number.value,
       emergency_contact_name: e.target.emergency_contact_name.value,
@@ -48,14 +53,18 @@ const Profile = () => {
         const updated = await res.json();
         setUserData(updated.user);
         setShowModal(false);
+      } else {
+        console.error("Failed to update profile:", res.statusText);
       }
     } catch (err) {
       console.error("Error updating profile:", err);
     }
   };
 
-  if (!firebaseUser || !userData)
+  // Display a loading message until user data is fetched
+  if (!userData) {
     return <p className="text-center mt-5">Loading...</p>;
+  }
 
   return (
     <section className="py-5 bg-light min-vh-100">
@@ -63,19 +72,22 @@ const Profile = () => {
         <div className="card shadow-lg mx-auto" style={{ maxWidth: "600px" }}>
           <div className="card-body">
             <h2 className="text-center text-danger mb-4">My Profile</h2>
+            {/* <p>
+              <strong>Name:</strong> {userData.first_name} {userData.last_name}
+            </p> */}
             <p>
-              <strong>Name:</strong> {firebaseUser.displayName}
-            </p>
-            <p>
-              <strong>Email:</strong> {firebaseUser.email}
+              <strong>Email:</strong> {userData.email}
             </p>
             <p>
               <strong>Phone:</strong> {userData.phone_number}
             </p>
             <p>
-              <strong>Emergency Contact:</strong>{" "}
-              {userData.emergency_contact_name} -{" "}
-              {userData.emergency_contact_phone}
+              <strong>Emergency Contact Name:</strong>
+              {userData.emergency_contact_name} 
+            </p>
+            <p>
+              <strong>Emergency Contact Name:</strong>
+              {userData.emergency_contact_phone} 
             </p>
             <div className="d-flex justify-content-end mt-4">
               <button
