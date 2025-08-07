@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { showSuccess, showError, showWarning } from "../utils/alerts";
@@ -100,10 +100,11 @@ const Report = () => {
 
       if (res.ok) {
         const data = await res.json();
-        showSuccess("Success", "Incident reported successfully!");
+        // Updated success message
+        showSuccess("Success", "Report submitted successfully and an email has been sent to the authorities.");
         console.log(data);
         // Redirect to the map page after a successful report
-        navigate("/map");
+        navigate("/map", { state: { newIncident: data.incident } });
       } else {
         const error = await res.json();
         showError("Submission Failed", error.error || "Something went wrong.");
@@ -115,8 +116,6 @@ const Report = () => {
       setIsSubmitting(false);
     }
   };
-  
- 
 
 
   return (
