@@ -5,6 +5,8 @@ import {
   faShieldAlt,
   faHeart,
   faPhone,
+  faLightbulb, // Added a new icon for vision
+  faHandshake, // Added a new icon for community
 } from "@fortawesome/free-solid-svg-icons";
 
 const About = () => {
@@ -14,7 +16,7 @@ const About = () => {
         {/* Heading and Mission */}
         <div className="text-center mb-5">
           <h2 className="fw-bold">How Ajali! Helps Save Lives</h2>
-          <p className="text-muted fs-6 mx-auto my-" style={{ maxWidth: "600px" }}>
+          <p className="text-muted fs-6 mx-auto" style={{ maxWidth: "600px" }}>
             Our mission is to create a safer Kenya by enabling rapid emergency
             response and community-driven incident reporting.
           </p>
@@ -78,6 +80,28 @@ const About = () => {
                 Kenyans who are already making a difference.
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* New Section: Our Vision */}
+        <div className="row g-4 mt-5">
+          <div className="col-md-6 order-md-2">
+            <div className="d-flex gap-3 align-items-center">
+                <FontAwesomeIcon icon={faLightbulb} className="text-danger fs-3" />
+                <h3 className="fw-bold text-danger">Our Vision</h3>
+            </div>
+            <p className="text-muted mt-2">
+              Our vision is to empower every Kenyan to be a first responder in their community. We believe that by providing a simple and effective tool for incident reporting, we can drastically reduce emergency response times and save more lives. Ajali! is more than an app; it's a movement to build a more resilient and caring society.
+            </p>
+          </div>
+          <div className="col-md-6 order-md-1">
+             <div className="d-flex gap-3 align-items-center">
+                <FontAwesomeIcon icon={faHandshake} className="text-danger fs-3" />
+                <h3 className="fw-bold text-danger">Community & Trust</h3>
+            </div>
+            <p className="text-muted mt-2">
+              The power of Ajali! lies in its users. We've built a platform based on trust and a collective commitment to safety. By joining, you become part of a nationwide network. Whether you're reporting an incident or simply being aware of your surroundings, your actions contribute to a collective safety net that protects us all.
+            </p>
           </div>
         </div>
 
