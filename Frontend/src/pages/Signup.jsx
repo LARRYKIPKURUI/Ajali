@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/alerticon.png";
 import { jwtDecode } from "jwt-decode";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { auth } from "../firebase";
+// import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+// import { auth } from "../firebase";
 import { showSuccess, showError } from "../utils/alerts";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
 
@@ -28,23 +28,23 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleGoogleSignup = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      const token = await user.getIdToken();
+  // const handleGoogleSignup = async () => {
+  //   const provider = new GoogleAuthProvider();
+  //   try {
+  //     const result = await signInWithPopup(auth, provider);
+  //     const user = result.user;
+  //     const token = await user.getIdToken();
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("userName", user.displayName);
+  //     localStorage.setItem("token", token);
+  //     localStorage.setItem("userName", user.displayName);
 
-      showSuccess("Signup Successful!", "Redirecting to report...");
-      navigate("/report");
-    } catch (error) {
-      console.error("Google Sign-Up Error:", error);
-      showError("Google Sign-Up Failed", error.message);
-    }
-  };
+  //     showSuccess("Signup Successful!", "Redirecting to report...");
+  //     navigate("/report");
+  //   } catch (error) {
+  //     console.error("Google Sign-Up Error:", error);
+  //     showError("Google Sign-Up Failed", error.message);
+  //   }
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -189,14 +189,14 @@ const Signup = () => {
           Sign Up
         </button>
 
-        <button
+        {/* <button
           type="button"
           className="btn btn-light border d-flex align-items-center justify-content-center gap-2 w-100 google-signup mb-2"
           onClick={handleGoogleSignup}
         >
           <FaGoogle className="google-icon" />
           Sign up with Google
-        </button>
+        </button> */}
 
         <p className="switch-link text-center mt-3">
           Already have an account?{" "}
