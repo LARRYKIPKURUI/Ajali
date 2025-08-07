@@ -22,10 +22,12 @@ function App() {
 
   return (
     <div className="d-flex flex-column min-vh-100">
+      {/* Pass isLoggedIn and onLogout to Navbar */}
       <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       
       {/* Main content */}
       <main className="flex-grow-1">
+        {/* Pass setIsLoggedIn to AppRoutes */}
         <AppRoutes setIsLoggedIn={setIsLoggedIn} />
       </main>
 

@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
+import { showSuccess, showError } from "../utils/alerts";
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [editFormData, setEditFormData] = useState({});
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       const token = localStorage.getItem("token");
-      if (!token) return; // Exit if no token is found
+      if (!token) return;
 
       try {
         const res = await fetch("http://localhost:5000/api/users/profile", {
@@ -17,27 +19,30 @@ const Profile = () => {
         if (res.ok) {
           const data = await res.json();
           setUserData(data);
+          // Initialize modal form data with fetched user data
+          setEditFormData(data);
         } else {
           console.error("Failed to fetch profile data:", res.statusText);
+          showError("Profile Error", "Failed to load user profile. Please try again.");
         }
       } catch (err) {
         console.error("Error fetching profile data:", err);
+        showError("Network Error", "Could not connect to the server.");
       }
     };
 
     fetchUserDetails();
   }, []);
 
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData({ ...editFormData, [name]: value });
+  };
+
   const handleSave = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
     if (!token) return;
-
-    const updatedInfo = {
-      phone_number: e.target.phone_number.value,
-      emergency_contact_name: e.target.emergency_contact_name.value,
-      emergency_contact_phone: e.target.emergency_contact_phone.value,
-    };
 
     try {
       const res = await fetch("http://localhost:5000/api/users/profile", {
@@ -46,22 +51,25 @@ const Profile = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(updatedInfo),
+        body: JSON.stringify(editFormData),
       });
 
       if (res.ok) {
         const updated = await res.json();
-        setUserData(updated.user);
+        setUserData(updated.user); // Update the main profile view with the 'user' object from the backend
         setShowModal(false);
+        showSuccess("Success!", "Profile updated successfully.");
       } else {
-        console.error("Failed to update profile:", res.statusText);
+        const error = await res.json();
+        console.error("Failed to update profile:", error.error);
+        showError("Update Failed", error.error || "Could not save changes.");
       }
     } catch (err) {
       console.error("Error updating profile:", err);
+      showError("Network Error", "Failed to connect to the server for update.");
     }
   };
-
-  // Display a loading message until user data is fetched
+  
   if (!userData) {
     return <p className="text-center mt-5">Loading...</p>;
   }
@@ -72,22 +80,21 @@ const Profile = () => {
         <div className="card shadow-lg mx-auto" style={{ maxWidth: "600px" }}>
           <div className="card-body">
             <h2 className="text-center text-danger mb-4">My Profile</h2>
-            {/* <p>
-              <strong>Name:</strong> {userData.first_name} {userData.last_name}
-            </p> */}
+            {/* Displaying username from the backend response */}
             <p>
+              <strong>Username:</strong> {userData.username}
+            </p>
+            <p> 
               <strong>Email:</strong> {userData.email}
             </p>
             <p>
               <strong>Phone:</strong> {userData.phone_number}
             </p>
             <p>
-              <strong>Emergency Contact Name:</strong>
-              {userData.emergency_contact_name} 
+              <strong>Emergency Contact Name:</strong> {userData.emergency_contact_name} 
             </p>
             <p>
-              <strong>Emergency Contact Name:</strong>
-              {userData.emergency_contact_phone} 
+              <strong>Emergency Contact Phone:</strong> {userData.emergency_contact_phone}
             </p>
             <div className="d-flex justify-content-end mt-4">
               <button
@@ -127,7 +134,8 @@ const Profile = () => {
                     <input
                       type="tel"
                       name="phone_number"
-                      defaultValue={userData.phone_number}
+                      value={editFormData.phone_number || ''}
+                      onChange={handleEditChange}
                       className="form-control"
                     />
                   </div>
@@ -141,7 +149,8 @@ const Profile = () => {
                     <input
                       type="text"
                       name="emergency_contact_name"
-                      defaultValue={userData.emergency_contact_name}
+                      value={editFormData.emergency_contact_name || ''}
+                      onChange={handleEditChange}
                       className="form-control"
                     />
                   </div>
@@ -155,7 +164,8 @@ const Profile = () => {
                     <input
                       type="tel"
                       name="emergency_contact_phone"
-                      defaultValue={userData.emergency_contact_phone}
+                      value={editFormData.emergency_contact_phone || ''}
+                      onChange={handleEditChange}
                       className="form-control"
                     />
                   </div>

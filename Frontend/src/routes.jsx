@@ -1,3 +1,4 @@
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Report from "./pages/Report";
@@ -10,12 +11,13 @@ import PrivateRoute from "./components/PrivateRoute";
 import AdminRoute from "./components/AdminRoute";
 import About from "./pages/About";
 
-
-const AppRoutes = () => {
+// AppRoutes now accepts setIsLoggedIn as a prop
+const AppRoutes = ({ setIsLoggedIn }) => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
+      {/* Pass setIsLoggedIn to the Login component */}
+      <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
       <Route path="/about" element={<About />} />
       <Route path="/signup" element={<Signup />} />
 

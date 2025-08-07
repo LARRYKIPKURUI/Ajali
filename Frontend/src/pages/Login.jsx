@@ -4,7 +4,8 @@ import logo from "../assets/alerticon.png";
 import { jwtDecode } from "jwt-decode";
 import { showSuccess, showError } from "../utils/alerts"; 
 
-const Login = () => {
+// The component now accepts setIsLoggedIn as a prop
+const Login = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
@@ -28,6 +29,12 @@ const Login = () => {
         const token = data.access_token;
 
         localStorage.setItem("token", token);
+        
+        // This is the key change: update the isLoggedIn state in the parent component
+        if (setIsLoggedIn) {
+          setIsLoggedIn(true);
+        }
+
         const decoded = jwtDecode(token);
         const isAdmin = decoded.is_admin;
 

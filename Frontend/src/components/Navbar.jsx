@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/alerticon.png";
 
-const Navbar = ({ user, onLogout }) => {
+// The component now accepts isLoggedIn and onLogout as props
+const Navbar = ({ isLoggedIn, onLogout }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
@@ -78,27 +79,16 @@ const Navbar = ({ user, onLogout }) => {
 
           {/* Right Auth Section */}
           <ul className="navbar-nav ms-auto">
-            {/* Conditional rendering based on the user prop */}
-            {user ? (
-              <>
-                <li className="nav-item me-2">
-                  <span
-                    className="btn btn-danger rounded-circle fw-bold text-white"
-                    style={{ width: "32px", height: "32px" }}
-                  >
-                    {/* Display the first letter of the username */}
-                    {user.username.charAt(0).toUpperCase()}
-                  </span>
-                </li>
-                <li className="nav-item">
-                  <button
-                    onClick={onLogout}
-                    className="btn btn-danger text-white fw-semibold"
-                  >
-                    Log Out
-                  </button>
-                </li>
-              </>
+            {/* Conditional rendering based on the isLoggedIn prop */}
+            {isLoggedIn ? (
+              <li className="nav-item">
+                <button
+                  onClick={onLogout}
+                  className="btn btn-danger text-white fw-semibold"
+                >
+                  Log Out
+                </button>
+              </li>
             ) : (
               <li className="nav-item">
                 <Link
