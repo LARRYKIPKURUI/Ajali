@@ -5,8 +5,8 @@ import {
   faShieldAlt,
   faHeart,
   faPhone,
-  faLightbulb, // Added a new icon for vision
-  faHandshake, // Added a new icon for community
+  faLightbulb, 
+  faHandshake, 
 } from "@fortawesome/free-solid-svg-icons";
 
 const About = () => {

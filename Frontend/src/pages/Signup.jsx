@@ -170,14 +170,8 @@ const Signup = () => {
           Sign Up
         </button>
 
-        {/* <button
-          type="button"
-          className="btn btn-light border d-flex align-items-center justify-content-center gap-2 w-100 google-signup mb-2"
-          onClick={handleGoogleSignup}
-        >
-          <FaGoogle className="google-icon" />
-          Sign up with Google
-        </button> */}
+        
+        
 
         <p className="switch-link text-center mt-3">
           Already have an account?{" "}

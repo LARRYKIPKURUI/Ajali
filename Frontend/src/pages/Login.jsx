@@ -4,7 +4,7 @@ import logo from "../assets/alerticon.png";
 import { jwtDecode } from "jwt-decode";
 import { showSuccess, showError } from "../utils/alerts"; 
 
-// The component now accepts setIsLoggedIn as a prop
+
 const Login = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });

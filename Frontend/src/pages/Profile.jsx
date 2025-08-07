@@ -19,7 +19,7 @@ const Profile = () => {
         if (res.ok) {
           const data = await res.json();
           setUserData(data);
-          // Initialize modal form data with fetched user data
+          // Initialize modal 
           setEditFormData(data);
         } else {
           console.error("Failed to fetch profile data:", res.statusText);
@@ -56,7 +56,7 @@ const Profile = () => {
 
       if (res.ok) {
         const updated = await res.json();
-        setUserData(updated.user); // Update the main profile view with the 'user' object from the backend
+        setUserData(updated.user); // Updating  the main profile view with the 'user' object from the backend
         setShowModal(false);
         showSuccess("Success!", "Profile updated successfully.");
       } else {

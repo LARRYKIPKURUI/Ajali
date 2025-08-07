@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
   const navigate = useNavigate();
 
-  // New function to handle the report incident click
+  
   const handleReportIncidentClick = () => {
     navigate("/login");
   };

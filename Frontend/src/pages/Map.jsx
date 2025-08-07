@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { useLocation } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { showError } from "../utils/alerts";
 
 // Fix Leaflet icon paths
 delete L.Icon.Default.prototype._getIconUrl;
@@ -10,9 +12,24 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
+// A component to automatically pan to the new marker
+const MapUpdater = ({ newIncident }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (newIncident) {
+      map.flyTo([newIncident.latitude, newIncident.longitude], 15, {
+        animate: true,
+        duration: 2
+      });
+    }
+  }, [newIncident, map]);
+  return null;
+};
+
 const Map = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [incidents, setIncidents] = useState([]);
+  const location = useLocation();
 
   useEffect(() => {
     // Get user location
@@ -27,25 +44,50 @@ const Map = () => {
       );
     }
 
-    // Fetch incidents
-    const fetchIncidents = async () => {
+    // Fetch incidents from the new /today endpoint
+    const fetchTodaysIncidents = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/incidents");
-        const data = await res.json();
-        setIncidents(data.incidents || data);
+        const res = await fetch("http://localhost:5000/api/incidents/today");
+        if (res.ok) {
+          const data = await res.json();
+          setIncidents(data.incidents || []);
+        } else {
+          showError("Map Error", "Failed to fetch incidents.");
+        }
       } catch (err) {
         console.error("Failed to fetch incidents:", err);
+        showError("Network Error", "Could not connect to the server.");
       }
     };
 
-    fetchIncidents();
-  }, []);
+    fetchTodaysIncidents();
+
+    // Check if a new incident was just reported
+    const newIncidentState = location.state?.newIncident;
+    if (newIncidentState) {
+        setIncidents(prevIncidents => [...prevIncidents, newIncidentState]);
+    }
+
+  }, [location.state]);
+
+  const getIncidentMarkerIcon = (isCritical) => {
+    return new L.Icon({
+        iconUrl: isCritical 
+            ? 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png' 
+            : 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+  };
 
   return (
     <section className="container py-5">
       <h2 className="text-center fs-2 mb-1">Live Incident Map</h2>
       <p className="text-center text-muted mb-4">
-        Track real-time incidents in your area and stay informed about local
+        Track real-time incidents reported today and stay informed about local
         emergencies.
       </p>
 
@@ -66,6 +108,9 @@ const Map = () => {
                 attribution="&copy; OpenStreetMap contributors"
               />
 
+              {/* MapUpdater component to handle flyTo */}
+              <MapUpdater newIncident={location.state?.newIncident} />
+
               {userLocation && (
                 <Marker position={userLocation}>
                   <Popup>You are here</Popup>
@@ -76,6 +121,7 @@ const Map = () => {
                 <Marker
                   key={incident.id}
                   position={[incident.latitude, incident.longitude]}
+                  icon={getIncidentMarkerIcon(incident.is_critical)}
                 >
                   <Popup>
                     <strong>{incident.title}</strong>
@@ -102,7 +148,9 @@ const Map = () => {
                 key={incident.id}
                 style={{ transition: "transform 0.2s ease-in-out" }}
               >
-                <div className="fs-3 me-3">🚨</div>
+                <div className="fs-3 me-3">
+                    {incident.is_critical ? "🚨" : "📢"}
+                </div>
                 <div className="flex-grow-1">
                   <strong>{incident.title}</strong>
                   <p className="mb-1 small text-muted">
@@ -119,7 +167,7 @@ const Map = () => {
                         ? "bg-danger"
                         : incident.type?.toLowerCase() === "medium"
                         ? "bg-warning text-dark"
-                        : "bg-purple text-white"
+                        : "bg-info text-white"
                     }`}
                     style={{ fontSize: "0.75rem" }}
                   >
