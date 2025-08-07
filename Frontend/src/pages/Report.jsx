@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import { useNavigate } from "react-router-dom"; 
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { showSuccess, showError, showWarning } from "../utils/alerts";
 
+// Fix for default marker icon
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
@@ -20,6 +22,8 @@ const LocationPicker = ({ onLocationSelect }) => {
 };
 
 const Report = () => {
+  const navigate = useNavigate(); // Initialize the hook
+
   const [formData, setFormData] = useState({
     category: "",
     title: "",
@@ -98,14 +102,8 @@ const Report = () => {
         const data = await res.json();
         showSuccess("Success", "Incident reported successfully!");
         console.log(data);
-        setFormData({
-          category: "",
-          title: "",
-          description: "",
-          media: null,
-          is_critical: false,
-        });
-        setMarkerPos(null);
+        // Redirect to the map page after a successful report
+        navigate("/map");
       } else {
         const error = await res.json();
         showError("Submission Failed", error.error || "Something went wrong.");
@@ -117,6 +115,9 @@ const Report = () => {
       setIsSubmitting(false);
     }
   };
+  
+ 
+
 
   return (
     <section className="container py-5">
