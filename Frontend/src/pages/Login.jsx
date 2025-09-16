@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/alerticon.png";
 import { jwtDecode } from "jwt-decode";
-import { showSuccess, showError } from "../utils/alerts"; 
-
+import { showSuccess, showError } from "../utils/alerts";
 
 const Login = ({ setIsLoggedIn }) => {
   const navigate = useNavigate();
@@ -29,8 +28,7 @@ const Login = ({ setIsLoggedIn }) => {
         const token = data.access_token;
 
         localStorage.setItem("token", token);
-        
-        // This is the key change: update the isLoggedIn state in the parent component
+
         if (setIsLoggedIn) {
           setIsLoggedIn(true);
         }
@@ -40,17 +38,16 @@ const Login = ({ setIsLoggedIn }) => {
 
         localStorage.setItem("isAdmin", isAdmin);
 
-        
         showSuccess("Login successful!", "You have been logged in.");
         navigate(isAdmin ? "/admin" : "/profile");
       } else {
         const error = await response.json();
-        
+
         showError("Login failed", error.error || "Please try again.");
       }
     } catch (error) {
       console.error("Login error:", error);
-      
+
       showError("Server error", "Please try again later.");
     }
   };
@@ -101,8 +98,9 @@ const Login = ({ setIsLoggedIn }) => {
               fontSize: "1.1rem",
             }}
           >
-            {showPassword ? "🙈" : "👁"}
+            {showPassword ? "👁" : "🙈"}
           </span>
+          
         </div>
 
         {/* Submit Button */}
